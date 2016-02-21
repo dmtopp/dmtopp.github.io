@@ -24,6 +24,4 @@ over the course of WDI!
       likes: ["Pictures of old boats","coding","etc."]
     }
 ```
-email | <dmtopp@gmailcom>
--------------------------
-cell 2 | other things
+:email: <dmtopp@gmailcom> 
