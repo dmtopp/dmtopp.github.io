@@ -2,64 +2,36 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Shopping Cart</title>
+    <link rel="stylesheet" href="css/master.css" media="screen" title="no title" charset="utf-8">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="javascript/app.js"></script>
+    <title>Daniel Topp</title>
   </head>
-  <script type="text/javascript">
-  var itemsToBeReviewed = [];
-  var itemsToBeReviewedLocation = [];
-  function reportInvalidItem(product, location) {
-    //sendMail('boss', 'boss@newco.nu', product);
-    itemsToBeReviewed.push(product);
-    itemsToBeReviewedLocation.push(location);
-  };
-
-  var prices = [
-    3.14,
-    69.99,
-    "meow"
-  ];
-
-  var totalPrice = 0;
-
-  var products = [
-    "Apple Pie",
-    "Auto Cat Feeder",
-    70.89
-  ];
-
-  console.log('Shopping Cart App');
-  console.log('-----------------');
-  console.log('We have found the following items in your cart:');
-  console.log(prices);
-  console.log(products);
-  console.log('-----------------');
-
-  prices.forEach(function(item){
-    if (typeof(item)=='number'){
-      totalPrice += item;
-    } else {
-      //throw new Error("That's not a number");
-      // console.log(item);
-      // console.log('Wrong data type');
-      reportInvalidItem(item,prices.indexOf(item));
-    }
-  });
-
-  console.log('-----------------');
-  console.log('Your total price is:');
-  console.log('-----------------');
-  console.log('$' + totalPrice);
-  console.log('-----------------');
-  console.log('We have found invalid items in your cart.');
-  console.log('They have been removed and your total does not reflect their price.');
-  console.log('-----------------');
-  console.log(itemsToBeReviewed);
-  console.log(itemsToBeReviewedLocation);
-  console.log('-----------------');
-  console.log('Thanks for using Phamazon! :) ')
-  console.log('-----------------');
-  </script>
   <body>
-    Fisher-Price "My first website"
+    <header>
+      <h1>Daniel Topp</h1>
+      <p>
+        Lady Gaga’s fervent performance was the musical highlight of the night.
+Lady Gaga’s fervent performance was the musical highlight of the night.
+CREDIT PHOTOGRAPH BY KEVIN WINTER/GETTY
+Last night’s Oscars were about the Oscars. The Academy, faced with an entirely justified barrage of anger regarding the lack of black nominees, put on a show to acknowledge, and to mock, its omissions while also publicly declaring that it has made concrete and practical changes in the hope of doing better next year and beyond. Although the producers of the ceremony could hardly have done otherwise, the extent and intensity of the largely comic apology were nonetheless surprising. It made for an extraordinary spectacle.
+As host, Chris Rock dove right into the subject and didn’t let up throughout the evening, adding a remarkable prerecorded sequence in which he interviewed black moviegoers in Compton about Oscar-nominated films. But Rock’s pointed jibes would have been mere window dressing were it not for the fact that the Academy is indeed making significant changes to its criteria for membership in order to increase the number of minority and women members and to reduce the number of voters who are inactive in the industry. The Academy’s President, Cheryl Boone Isaacs, spoke during the ceremony to emphasize these changes (which have, of course, proven unpopular among the segment of the membership who’ll be affected).
+But the main shift this year’s ceremony reflects is in the realm of media. The Oscars are about movies, of course, while the Oscar ceremony is a television show, devised and run not for the experience of the people in the hall but for viewers. Yet the rapid and seemingly ubiquitous challenge to this year’s exclusionary Oscar nominations came from social media. Last night’s ceremony was, in effect, tele-governed by the much-derided realm of hashtag activism (the term alone is snarkily pejorative). This cultural phenomenon did itself proud with the #OscarsSoWhite meme as a sort of journalism on the fly that, with accuracy and style, called rapid and clear attention both to the fact of the Academy’s skewed nominations and to the underlying matter of the Academy’s disconnection from the most passionate movie-lovers, from young people, from a significant swath of the broadcast’s likely audience, and perhaps most important, from what many Academy members themselves would perceive as right opinion. This is the year in which Twitter and Facebook, far from being sideline commentators providing merely a more efficient flow of free publicity, became the main show—and the realms of movies and television became, instead, instantly reactive. (Look no further than the Stacey Dash cameo.) The penetration of social media into the ceremony came through in other ways as well—particularly in the element of activism and advocacy that marked many of the events on the broadcast. The biggest surprise, for its substance as well as for its intensity, was Vice-President Joe Biden’s moving and fiercely committed speech exhorting viewers to “change the culture” regarding sexual assault and to “take the pledge” regarding the It’s On Us initiative, a commitment to “intervene in situations where consent has not or can not be given.”
+    </p>
+    <h2>This is an h2</h2>
+    <p>
+Biden’s speech was followed by the musical highlight of the evening, Lady Gaga’s performance of “Til It Happens to You,” which she co-wrote with Diane Warren for the documentary “The Hunting Ground,” and which was one of the five nominees for Best Original Song. It was a performance of a stunningly fervent artistry, her sense of emotional abandon and her vocal control joining to burst through the screen with a rare immediacy. But the Oscar went to Sam Smith, for “Writing’s on the Wall,” from “Spectre.”
+That particular Oscar was an outlier; it was one of the few that was bestowed on a work of mere entertainment. The movies that won the big prizes, such as “Spotlight” and “The Revenant,” and the most prizes (“Mad Max: Fury Road”), wore their political agendas proudly. In accepting the award for Best Director, Alejandro González Iñárritu (who won the award for the second year in a row, a feat previously achieved only by Joseph L. Mankiewicz, for films released in 1949 and 1950, and John Ford, for films from 1940 and 1941) emphasized the racial hatred at the core of the story. When Leonardo DiCaprio won for Best Actor in the same film, he called attention to its environmental theme in reminding viewers of the dangers of climate change.
+Yet in a year in which black actors and filmmakers were absent from the nominations, it’s worth noting that the Academy’s omissions are as much a failure to recognize the actual best in the year’s movies as it is a failure to recognize the very notion of artistic merit in filmmaking. For instance, one absence looming over this year’s awards ceremony was the host-who-never-was, Eddie Murphy, who was scheduled to host the broadcast four years ago, but who withdrew shortly after the show’s producer, Brett Ratner, resigned. Murphy was, however, a presenter at the Oscars in 1988, for the Best Picture award, and in his extraordinary remarks he addressed, overtly and comically but earnestly and daringly, the near-total exclusion of black artists from the Oscars. As he spoke, he said, “I’ll probably never win an Oscar for saying this.” So far, he has proven himself right.
+Eddie Murphy has has been nominated only once, for Best Supporting Actor, in “Dreamgirls,” from 2006. That’s a dramatic role. He wasn’t nominated for “Trading Places,” for “Coming to America,” or—yes—for “Norbit.” It isn’t just Murphy, though. Reese Witherspoon was a presenter last night, and, seeing her, I recalled that, though she was nominated for “Wild,” and won for “Walk the Line,” she didn’t even get a nomination for her work in “Election” or “Legally Blonde.” Comedy doesn’t get any respect. These warped standards often push women and minorities (who have far too few substantial roles available) into sententious dramas that cramp their artistry even as they win them acclaim. Murphy is finally scheduled to appear in a movie later this year, and the bare-bones description is terrifying. It’s called “Mr. Church,” in which Murphy plays a cook, Henry Joseph Church, for a white family. It’s directed by Bruce Beresford, who, nearly thirty years ago, made “Driving Miss Daisy.” If I didn’t find this on IMDb, I’d think it was the work of The Onion.
+The closing music on last night’s broadcast (actually, early this morning—shortly after midnight) was “Fight the Power,” the music from the opening of “Do the Right Thing,” which was released in 1989. I was happy to hear it. But that movie had only two Oscar nominations (Best Supporting Actor—Danny Aiello, who is white—and Best Original Screenplay) and no wins. Its director, Spike Lee, got an honorary Oscar this year. But he also had a new movie out, “Chi-Raq,” one that is as good and as great as “Do the Right Thing,” and which got zero nominations. (Both are deeply serious films that include a major element of comedy.) And it’s very hard to imagine Academy voters who consider “Spotlight” a superlative film doing much better by “Chi-Raq,” or any film of comparable ambition, audacity, and achievement.
+When the Academy gave its Best Picture award to “Driving Miss Daisy,” in 1990, I believe that it was expressing a preference that was even more strongly aesthetic than it was political. “Spotlight” is this year’s “Driving Miss Daisy,” not because it represents a retrograde social attitude but, rather, a retrograde aesthetic. The social attitudes of “Spotlight” are, by today’s standards, nearly unimpeachable; its substance is no more provocative than is its style. It had the artistic imprimatur of many of the leading critics’ groups; the Academy was treading on ground that had been primed. The important changes in Oscar voting that are so ardently wished may prove to be more than a matter of membership alone. The Oscars are also awaiting a sea-change in critical ideas.
+
+
+
+
+
+      </p>
+    </header>
   </body>
 </html>
