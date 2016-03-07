@@ -55,17 +55,44 @@ The collideDetect function will be the hardest to implement.  The plan is to che
 ![picture]
 
 ```js
-context.getImgData(x-dx, y-dy, w+2*dw, dh);
-context.getImgData(x-dx, y, dw, h);
-context.getImgData(x+w, y, dw, h);
-context.getImgData(x-dx, y+h, w+2*dw, dh);  
+var RGBdata1 = context.getImgData(x-dx, y-dy, w+2*dw, dh);
+var RGBdata2 = context.getImgData(x-dx, y, dw, h);
+var RGBdata3 = context.getImgData(x+w, y, dw, h);
+var RGBdata4 = context.getImgData(x-dx, y+h, w+2*dw, dh);  
 ```
-The above commands will return an array of RGBA values for the pixels in the rectangles around the character.  Finding a color that matches with tentacles will trigger the loss of a life.  Optionally, finding the color of a coin or powerup will have additional effects.
+The above commands will return an array of RGBA values for the pixels in the rectangles around the character.
+
+```js
+  var allRGBdata = RGBdata1.concat(RGBdata2,RGBdata3,RGBdata4);  
+
+  for (i = 0; i < allRGBdata.length; i+=4){
+    if (allRGBdata[i] === redvalue &&
+        allRGBdata[i+1] === greenvalue && allRGBdata[i+2] === bluevalue){
+          return true;
+        }
+  }
+```
+
+Finding a color that matches with tentacles will trigger the loss of a life.  Optionally, finding the color of a coin or powerup will have additional effects.
 
 ```js
 if(finds color of tentacle){
   clearInterval(loop);
   lives -= 1;
   characterPosition = (initialPosition);
+  if (lives = 0) {
+    // display game over
+  }else{
+    window.addEventListener('keydown',playOctopus);
+  }
 }
+```
+
+Finally, if the player runs out of lives, the game is over.
+
+```js
+  if(lives === 0){
+    clearInterval(loop);
+    displayGameOver();
+  }
 ```
