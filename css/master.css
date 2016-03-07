@@ -188,3 +188,22 @@ footer a {
   display: inline-block;
   margin-top: 10px;
 }
+
+@media only screen and (max-width: 940px) {
+  .responsive {
+    transform: rotate(11775deg);
+    transition: all 15s ease-in-out;
+  }
+}
+
+.mobile {
+  display: none;
+}
+
+@media handheld, only screen and (max-device-width: 450px) {
+  .mobile {
+    display: block;
+    font-size: 4em;
+    color: red;
+  }
+}
