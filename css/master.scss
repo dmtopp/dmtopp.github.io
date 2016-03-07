@@ -1,0 +1,348 @@
+//begin dan's sexy grid
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+$content-width: 1000px;
+$border: 0px solid black;
+$padding-amt: 20px;
+$margin-amt: 0.5%;
+$base-font: 16px;
+
+// 12-column grid layout
+.col-1{
+  display: inline-block;
+  width: 7.416%;
+  margin: 0 $margin-amt;
+  font-size: $base-font;
+}
+
+.col-2{
+  display: inline-block;
+  width: 15.832%;
+  margin: 0 $margin-amt;
+  font-size: $base-font;
+}
+
+.col-3{
+  display: inline-block;
+  width: 24.25%;
+  margin: 0 $margin-amt;
+  font-size: $base-font;
+}
+
+.col-4{
+  display: inline-block;
+  width: 32.666%;
+  margin: 0 $margin-amt;
+  font-size: $base-font;
+}
+
+.col-5{
+  display: inline-block;
+  width: 41.082%;
+  margin: 0 $margin-amt;
+  font-size: $base-font;
+}
+
+.col-6{
+  display: inline-block;
+  width: 49.5%;
+  margin: 0 $margin-amt;
+  font-size: $base-font;
+}
+.col-7{
+  display: inline-block;
+  width: 57.916%;
+  margin: 0 $margin-amt;
+  font-size: $base-font;
+}
+
+.col-8{
+  display: inline-block;
+  width: 66.332%;
+  margin: 0 $margin-amt;
+  font-size: $base-font;
+}
+
+.col-9{
+  display: inline-block;
+  width: 74.75%;
+  margin: 0 $margin-amt;
+  font-size: $base-font;
+}
+.col-10{
+  display: inline-block;
+  width: 83.166%;
+  margin: 0 $margin-amt;
+  font-size: $base-font;
+}
+
+.col-11{
+  display: inline-block;
+  width: 91.582%;
+  margin: 0 $margin-amt;
+  font-size: $base-font;
+}
+
+.col-12{
+  display: inline-block;
+  width: 100%;
+  margin: 0;
+  font-size: $base-font;
+}
+
+.first{
+  margin-left: 0;
+}
+
+.last{
+  margin-right: 0;
+}
+
+.row {
+  width: 100%;
+  margin: 0 auto;
+  font-size: 0;
+}
+
+.container{
+  width: 100%;
+  padding: 0 $padding-amt;
+  text-align: center;
+}
+
+div {
+  display: inline-block;
+}
+
+//end dan's sexy grid
+
+// .container {
+//   padding: 0px;
+// }
+//
+// .row {
+//   width: 1000px;
+//   height: 100%;
+//   padding: 0px 20px;
+//   margin: auto;
+// }
+
+/**
+ * Width: 1000
+ * Margin: 3% (between each column)
+ */
+//
+// .col-1 {
+//   float: left;
+//   width: 5.33%;
+//   margin-right: 3%;
+// }
+//
+// .col-2 {
+//   float: left;
+//   width: 13.66%;
+//   margin-right: 3%;
+// }
+//
+// .col-3 {
+//   float: left;
+//   width: 22%;
+//   margin-right: 3%;
+// }
+//
+// .col-4 {
+//   float: left;
+//   width: 30.33%;
+//   margin-right: 3%;
+// }
+//
+// .col-5 {
+//   float: left;
+//   width: 38.66%;
+//   margin-right: 3%;
+// }
+// .col-6 {
+//   float: left;
+//   width: 47%;
+//   margin-right: 3%;
+// }
+//
+// .col-7 {
+//   float: left;
+//   width: 55.33%;
+//   margin-right: 3%;
+// }
+// .col-8 {
+//   float: left;
+//   width: 63.66%;
+//   margin-right: 3%;
+// }
+//
+// .col-9 {
+//   float: left;
+//   width: 72%;
+//   margin-right: 3%;
+// }
+//
+// .col-10 {
+//   float: left;
+//   width: 80.33%;
+//   margin-right: 3%;
+// }
+//
+// .col-11 {
+//   float: left;
+//   width: 88.66%;
+//   margin-right: 3%;
+// }
+//
+// .col-12 {
+//   float: right;
+//   width: 100%;
+//   margin-right: 0;
+// }
+html,body{
+  height: 100%;
+  width: 100%;
+  font-family: 'Lora', 'Times New Roman',serif;
+  background-color: rgba(250,250,246,1);
+  color: rgba(0,0,0,1);
+}
+
+a {
+  color: rgba(250,250,248,1);
+  text-decoration: none;
+  margin: 10px;
+}
+
+p {
+  font-size: $base-font;
+  line-height: 1.5em;
+  margin: 0;
+}
+
+h2 {
+  font-size: 32px;
+  margin-top: 1.5em;
+  margin-bottom: 0.3em;
+}
+
+h3{
+  margin-top: 1.5em;
+  margin-bottom: 0.3em;
+}
+
+ul li {
+  font-size: 1.2em;
+  display: inline;
+  float: right;
+  background-color: rgba(0,0,0,0.45);
+  margin-top: 10px;
+  padding: 5px;
+}
+
+header {
+  background-image: url('https://static-secure.guim.co.uk/sys-images/Guardian/Pix/pictures/2013/12/30/1388403222666/Endurance-trapped-in-ice--015.jpg');
+  background-position: center;
+  height: 200px;
+}
+
+header h1{
+  color: rgba(250,250,248,0.9);
+  font-size: 45px;
+  margin-top: 120px;
+}
+
+.overlay{
+  background-color: rgba(250,250,248,0.3);
+  height: 100%;
+  width: 100%
+}
+
+nav:last-child {
+  margin-right: 0;
+}
+
+aside:last-child {
+  margin-right: 0;
+}
+
+
+aside img{
+  width: 175px;
+  height: 175px;
+  text-align: center;
+  border-radius: 50%;
+  margin-left: 72px;
+  margin-top: 15%;
+}
+
+p:last-child{
+  margin-bottom: 40px;
+}
+
+.main-content{
+  border-right: 3px solid rgba(0,0,0,0.7);
+}
+
+footer{
+  text-align: center;
+  color: rgba(250,250,248,0.9);
+  background-image: url('https://static-secure.guim.co.uk/sys-images/Guardian/Pix/pictures/2013/12/30/1388403222666/Endurance-trapped-in-ice--015.jpg');
+  background-position: center;
+  height: 40px;
+  clear: both;
+  padding: 0 25px;
+}
+
+footer a {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+
+
+// @media only screen and (max-width: 999px) {
+//   .responsive {
+//     transform: rotate(11775deg);
+//     transition: all 15s ease-in-out;
+//   }
+//   .row {
+//     width: 80%;
+//   }
+// }
+//
+// @media only screen and (max-width: 450px) {
+//
+// }
+//
+// .mobile {
+//   display: none;
+// }
+//
+// @media handheld, only screen and (max-device-width: 450px) {
+//   .mobile {
+//     display: block;
+//     font-size: 4em;
+//     color: red;
+//   }
+// }
