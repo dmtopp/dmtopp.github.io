@@ -13,6 +13,7 @@ You, the player, control the actions of an unfortunate deep-sea diver who has en
 * The player can collect coins/objects/bubbles to increase their score
 * 2-player mode!  Players switch off levels mario-bros style.  Each player has their own score and number of lives.  The level ends when more tentacles are added.
 * "It's simple physics, really." Pressing keys gives the character acceleration and velocity instead of simply moving the character's position.  The character floats to the bottom of the level by default.
+* Music and sounds
 
 ### Pseudocode
 

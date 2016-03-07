@@ -1,3 +1,5 @@
+var app = app || {};
+
 // returns a number between the two parameters
 function randomRange(min,max){
   if (min === 0) return Math.random() * max;
@@ -12,51 +14,45 @@ function returnRandomRGBA() {
 
 
 function fractalSquares(x,y,sideLength,angle,limit){
-  // get our canvas
-  var canvas = document.getElementById('canvas');
-  var context = canvas.getContext('2d');
-  context.save();
-  context.translate(x,y);
-  context.rotate(angle);
-  context.fillStyle = 'purple';
-  context.fillRect(0,0,sideLength,-sideLength);
-  context.fillRect(x,y,sideLength,sideLength);
+  app.context.save();
+  app.context.translate(x,y);
+  app.context.rotate(angle);
+  app.context.fillStyle = 'purple';
+  app.context.fillRect(0,0,sideLength,-sideLength);
+  app.context.fillRect(x,y,sideLength,sideLength);
   var x0 = 0;
   var y0 = -sideLength;
   var newSide = sideLength * 0.9;
   if (limit > 0){
     fractalSquares(x0,y0,newSide,angle,limit - 1);
   }
-  context.restore();
+  app.context.restore();
 }
 
 function drawTentacles(sideLength,numTentacles,limit){
   // Set up canvas
-  var canvas = document.getElementById('canvas');
-  var context = canvas.getContext('2d');
-  var width = canvas.width;
-  var x = (width/2)-(sideLength/2);
+  var x = (app.width/2)-(sideLength/2);
   // angle to rotate each new tentacle by
   var angle = -2*Math.PI/numTentacles;
   // clear the screen
-  context.clearRect(0,0,width,width);
+  app.context.clearRect(0,0,app.width,app.width);
   // save our starting point
-  context.save();
-  context.translate(x,x);
+  app.context.save();
+  app.context.translate(x,x);
   // draw all of our tentacles
   for(i=0; i < numTentacles; i++){
 
-    context.rotate(angle);
+    app.context.rotate(angle);
     fractalSquares(0,0,sideLength,arrayOfStartingAngles[i],limit);
     arrayOfStartingAngles[i] += deltaAngles[i];
     if (arrayOfStartingAngles[i] > Math.PI/6 ||
         arrayOfStartingAngles[i] < -Math.PI/6) {deltaAngles[i] = -deltaAngles[i]}
   }
-  context.restore();
+  app.context.restore();
 }
 
 
-var numTentacles = 30;
+var numTentacles = 10;
 // array of random starting angles for each of our tentacles
 var arrayOfStartingAngles = [];
 // keeps track of the direction each tentacle should be moving and by how much
@@ -81,5 +77,8 @@ function animateLoop() {
 
 
 window.onload = function(){
+  app.canvas = document.getElementById('canvas');
+  app.context = app.canvas.getContext('2d');
+  app.width = canvas.width;
   var intervalID = window.setInterval(animateLoop, 50);
 };
