@@ -12,6 +12,7 @@ function returnRandomRGBA() {
 
 
 function fractalSquares(x,y,sideLength,angle,limit){
+  // get our canvas
   var canvas = document.getElementById('canvas');
   var context = canvas.getContext('2d');
   context.save();
@@ -30,63 +31,55 @@ function fractalSquares(x,y,sideLength,angle,limit){
 }
 
 function drawTentacles(sideLength,numTentacles,limit){
-  console.log('drew one!');
+  // Set up canvas
   var canvas = document.getElementById('canvas');
   var context = canvas.getContext('2d');
   var width = canvas.width;
   var x = (width/2)-(sideLength/2);
+  // angle to rotate each new tentacle by
   var angle = -2*Math.PI/numTentacles;
+  // clear the screen
   context.clearRect(0,0,width,width);
+  // save our starting point
   context.save();
-  context.fillRect(x,x,sideLength,sideLength);
   context.translate(x,x);
+  // draw all of our tentacles
   for(i=0; i < numTentacles; i++){
-    context.translate(0,sideLength);
+
     context.rotate(angle);
     fractalSquares(0,0,sideLength,arrayOfStartingAngles[i],limit);
     arrayOfStartingAngles[i] += deltaAngles[i];
-    if (arrayOfStartingAngles[i] > Math.PI/12 ||
-        arrayOfStartingAngles[i] < -Math.PI/12) {deltaAngles[i] = -deltaAngles[i]}
+    if (arrayOfStartingAngles[i] > Math.PI/6 ||
+        arrayOfStartingAngles[i] < -Math.PI/6) {deltaAngles[i] = -deltaAngles[i]}
   }
   context.restore();
 }
 
 
-
-var numTentacles = 14;
+var numTentacles = 30;
+// array of random starting angles for each of our tentacles
 var arrayOfStartingAngles = [];
+// keeps track of the direction each tentacle should be moving and by how much
 var deltaAngles = [];
+// tentacles start at a random angle betweeen -Pi/2 and Pi/2
+// all tentacles increment at pi/1000
 for (i=0; i < numTentacles; i++){
   arrayOfStartingAngles.push(randomRange(-Math.PI/12,Math.PI/12));
   deltaAngles.push(Math.PI/1000);
 }
 
 
-function init(){
-  return setInterval(console.log('hi'),10);
-}
 
 
-var intervalID = window.setInterval(myCallback, 50);
 
-function myCallback() {
+
+
+function animateLoop() {
   drawTentacles(50,numTentacles,20);
 }
 
 
 
 window.onload = function(){
-  // var canvas = document.getElementById('canvas');
-  // var context = canvas.getContext('2d');
-  // context.fillRect(275,275,50,50);
-  // context.translate(275,275);
-  // for(i=0; i <4; i++){
-  //   context.translate(0,50);
-  //   context.rotate(-Math.PI/2);
-  //   fractalSquares(0,0,50,randomRange(-Math.PI/18,Math.PI/18),50);
-  // }
-
-
-  init();
-
+  var intervalID = window.setInterval(animateLoop, 50);
 };
