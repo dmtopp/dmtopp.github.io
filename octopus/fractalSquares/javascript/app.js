@@ -162,18 +162,31 @@ function animateLoop() {
   app.context.clearRect(0,0,app.width,app.width);
   drawTentacles();
   pauli.drawPauli();
-  if (app.northDown) pauli.dy -= 7;
-  if (app.southDown) pauli.dy += 7;
-  if (app.eastDown) pauli.dy += 7;
-  if (app.westDown) pauli.dy -= 7;
+  if (app.northDown) pauli.dy -= 3;
+  if (app.southDown) pauli.dy += 3;
+  if (app.eastDown) pauli.dx += 3;
+  if (app.westDown) pauli.dx -= 3;
   // If pauli is going to go off the screen, don't move pauli
-  if (pauli.xPos + pauli.dx > app.width ||
-      pauli.xPos + pauli.dy < 0) pauli.dx = 0;
-  else if (pauli.yPos + pauli.dy > app.width ||
-           pauli.yPos + pauli.dy < 0) pauli.dy = 0;
+  if (pauli.xPos + pauli.dx > app.width){
+    pauli.dx = 0;
+    pauli.xPos = app.width;
+  } else if (pauli.xPos + pauli.dy < 0) {
+    pauli.dx = 0;
+    pauli.xPos = 0;
+  } else if (pauli.yPos + pauli.dy > app.width) {
+    pauli.dy = 0;
+    pauli.yPos = app.width;
+  } else if (pauli.yPos + pauli.dy < 0) {
+    pauli.dy = 0;
+    pauli.yPos = 0;
+  }
   // update Pauli's position
   pauli.xPos += pauli.dx;
   pauli.yPos += pauli.dy;
+  if (pauli.dx > 0) pauli.dx -= 1;
+  else if (pauli.dx < 0) pauli.dx += 1;
+  else if (pauli.dy > 3) pauli.dy -= 1.5;
+  else if (pauli.dy < 3) pauli.dy += 1.5;
 }
 
 
