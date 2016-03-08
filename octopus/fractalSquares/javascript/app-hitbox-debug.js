@@ -87,6 +87,7 @@ var app = app || {
         break;
       }
   } // end keyup
+
 }; // end of app object
 
 
@@ -96,31 +97,41 @@ var pauli = {
   height: 42,
   xPos: 40,
   yPos: 662,
+  headRadius: 7,
+  bodyLength: 28,
+  bodyWidth: 10,
   dx: 0.5,
   dy: -0.5,
   speed: 12,
   drawPauli: function(){
     var image = new Image();
-    // image.crossOrigin = "Anonymous";
+    image.crossOrigin = "Anonymous";
     image.src = 'img/pauli-sprite.png';
     app.context.drawImage(image,this.xPos,this.yPos);
+    // app.context.fillStyle = 'orange';
+    // app.context.beginPath();
+    // app.context.arc(this.xPos+20,this.yPos,10,0,Math.PI*2);
+    // app.context.closePath();
+    // app.context.fill();
+    // app.context.fillStyle = 'black';
+    // app.context.fillRect(this.xPos+15,this.yPos+10,10,28);
   },
   updatePosition: function(){
     if (app.northDown) this.dy -= (this.speed * app.dt);
     if (app.southDown) this.dy += (this.speed * app.dt);
     if (app.eastDown) this.dx += (this.speed * app.dt);
     if (app.westDown) this.dx -= (this.speed * app.dt);
-    // Bounce pauli off the edges of the screen
-    if (this.xPos + this.width > app.width){
+    // If pauli is going to go off the screen, don't move pauli
+    if (this.xPos + this.dx > app.width){
       this.dx *= -1;
       // this.xPos = app.width;
-    } else if (this.xPos < 0) {
+    } else if (this.xPos + this.dy < 0) {
       this.dx *= -1;
       // this.xPos = 0;
-    } else if (this.yPos + this.width > app.width) {
+    } else if (this.yPos + this.dy > app.width) {
       this.dy *= -1;
       // this.yPos = app.width;
-    } else if (this.yPos < 0) {
+    } else if (this.yPos + this.dy < 0) {
       this.dy *= -1;
       // this.yPos = 0;
     }
@@ -168,6 +179,7 @@ function drawTentacles(){
   app.context.translate(x,x);
   // draw all of our tentacles
   for(i=0; i < app.numTentacles; i++){
+
     app.context.rotate(angle);
     fractalSquares(0,0,app.tentacleBaseWidth,app.tentacleAngles[i],app.limit);
     app.tentacleAngles[i] += app.deltaAngles[i];
@@ -182,48 +194,30 @@ function collideDetect(){
   var dh = Math.abs(pauli.dy);
   var x = Math.floor(pauli.xPos);
   var y = Math.floor(pauli.yPos);
+  //console.log(dw,dh,x,y);
   app.context.fillStyle = 'rgba(0,0,0,0.4)';
+  // app.context.fillRect(x-dw, y-dh, pauli.width+2*dw, dh);
+  // app.context.fillRect(x-dw, y, dw, pauli.height);
+  // app.context.fillRect(x+pauli.width, y, dw, pauli.height);
+  // app.context.fillRect(x-dw, y+pauli.height, pauli.width+2*dw, dh);
+  // var RGBdata1 = app.context.getImageData(x-dw, y-dh, pauli.width+2*dw, dh);
+  // var RGBdata2 = app.context.getImageData(x-dw, y, dw, pauli.height);
+  // var RGBdata3 = app.context.getImageData(x+pauli.width, y, dw, pauli.height);
+  // var RGBdata4 = app.context.getImageData(x-dw, y+pauli.height, pauli.width+2*dw, dh);
+  // var allRGB = [];
   var allRGB = app.context.getImageData(x-dw,y-dh,pauli.width + 2*dw,pauli.height + 2*dh);
-  //app.context.fillRect(x-dw,y-dh,pauli.width + 2*dw,pauli.height + 2*dh);
-  if (allRGB){
-    for (var i = 0; i < allRGB.data.length; i+=4){
-      if (allRGB.data[i] === 128 &&
-          allRGB.data[i+1] === 0 &&
-          allRGB.data[i+2] === 128){
-            console.log('hit');
-            return true;
-          }
-    }
-  }
-}
-
-
-function init() {
-  app.context.clearRect(0,0,app.width,app.width);
-  pauli.xPos = 40;
-  pauli.yPos = 662;
-  pauli.dx = 0;
-  pauli.dy = 0;
-  drawTentacles();
-  pauli.drawPauli();
-}
-
-// function timer(){
-//   var timer = document.querySelector('#timer');
-//   timer.innerHTML = j;
-//   j--;
-//   if (j === 0){
-//     pauli.dx = 0.5;
-//     pauli.dy = -0.5;
-//     window.addEventListener('keydown',app.onKeyDown,true);
-//     window.addEventListener('keyup',app.onKeyUp,true);
-//   }
-// }
-
-function startGame(event){
-  if (event.keyCode === 32){
-    app.intervalID = requestAnimationFrame(animateLoop);
-    window.removeEventListener('keydown',startGame,true);
+  app.context.fillRect(x-dw,y-dh,pauli.width + 2*dw,pauli.height + 2*dh);
+  // RGBdata1.data.forEach(function(item){allRGB.push(item)});
+  // RGBdata2.data.forEach(function(item){allRGB.push(item)});
+  // RGBdata3.data.forEach(function(item){allRGB.push(item)});
+  // RGBdata4.data.forEach(function(item){allRGB.push(item)});
+  for (var i = 0; i < allRGB.data.length; i+=4){
+    if (allRGB.data[i] === 128 &&
+        allRGB.data[i+1] === 0 &&
+        allRGB.data[i+2] === 128){
+          console.log('hit');
+          return true;
+        }
   }
 }
 
@@ -231,22 +225,18 @@ function startGame(event){
 function animateLoop() {
   var now = Date.now();
   app.dt = (now - app.lastTime)/1000;
+
   app.intervalID = requestAnimationFrame(animateLoop);
   app.context.clearRect(0,0,app.width,app.width);
   drawTentacles();
   pauli.drawPauli();
   pauli.updatePosition();
-  if(collideDetect()){
-    window.addEventListener('keydown',startGame,true);
-    cancelAnimationFrame(app.intervalID);
-    init();
-
-  }
+  collideDetect();
   app.lastTime = now;
   var displayDt = document.querySelector('#dt');
   var displayDx = document.querySelector('#dx');
   var displayDy = document.querySelector('#dy');
-  displayDt.innerHTML = 'intervalID:' + app.intervalID;
+  displayDt.innerHTML = 'dt:' + app.dt;
   displayDx.innerHTML = 'dx:' + pauli.dx;
   displayDy.innerHTML = 'dy:' + pauli.dy;
 }
@@ -257,14 +247,12 @@ window.onload = function(){
   app.width = canvas.width;
   // initialize tentacle angles
   // tentacles start at a random angle betweeen -Pi/2 and Pi/2
-  // all tentacles increment at pi/3000
+  // all tentacles increment at pi/1000
   for (i=0; i < app.numTentacles; i++){
     app.tentacleAngles.push(app.randomRange(-Math.PI/12,Math.PI/12));
     app.deltaAngles.push(Math.PI/3000);
   }
-  init();
   app.intervalID = requestAnimationFrame(animateLoop);
   window.addEventListener('keydown',app.onKeyDown,true);
   window.addEventListener('keyup',app.onKeyUp,true);
-
 };
