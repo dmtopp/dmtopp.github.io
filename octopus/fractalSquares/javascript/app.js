@@ -58,7 +58,7 @@ var app = app || {
         app.eastDown = true;
         break;
     }
-  },
+  }, // end keyDown
   onKeyUp: function(evt) {
     console.log('keyup')
     switch (evt.keyCode) {
@@ -87,11 +87,15 @@ var app = app || {
         app.eastDown = false;
         break;
       }
-  }
+  } // end keyup
 
-};
+}; // end of app object
 
+
+// begin pauli object
 var pauli = {
+  width: 35,
+  height: 87,
   xPos: 40,
   yPos: 662,
   headRadius: 7,
@@ -99,15 +103,19 @@ var pauli = {
   bodyWidth: 10,
   dx: 0.5,
   dy: -0.5,
-  speed: 20,
+  speed: 12,
   drawPauli: function(){
-    app.context.fillStyle = 'orange';
-    app.context.beginPath();
-    app.context.arc(this.xPos+20,this.yPos,10,0,Math.PI*2);
-    app.context.closePath();
-    app.context.fill();
-    app.context.fillStyle = 'black';
-    app.context.fillRect(this.xPos+15,this.yPos+10,10,28);
+    var image = new Image();
+    image.crossOrigin = "Anonymous";
+    image.src = 'img/pauli-sprite.png';
+    app.context.drawImage(image,this.xPos,this.yPos);
+    // app.context.fillStyle = 'orange';
+    // app.context.beginPath();
+    // app.context.arc(this.xPos+20,this.yPos,10,0,Math.PI*2);
+    // app.context.closePath();
+    // app.context.fill();
+    // app.context.fillStyle = 'black';
+    // app.context.fillRect(this.xPos+15,this.yPos+10,10,28);
   },
   updatePosition: function(){
     if (app.northDown) this.dy -= (this.speed * app.dt);
@@ -137,7 +145,7 @@ var pauli = {
     // else if (this.dy < 3) this.dy += 1.5;
 
   }
-}
+} // end pauli object
 
 
 
@@ -182,15 +190,26 @@ function drawTentacles(){
   app.context.restore();
 }
 
-
-
-
-
-
-
-
-
-
+function collideDetect(){
+  var dw = Math.abs(pauli.dx);
+  var dh = Math.abs(pauli.dy);
+  var x = Math.floor(pauli.xPos);
+  var y = Math.floor(pauli.yPos);
+  //console.log(dw,dh,x,y);
+  var RGBdata1 = app.context.getImageData(x-dw, y-dh, pauli.width+2*dw, dh);
+  var RGBdata2 = app.context.getImageData(x-dw, y, dw, pauli.height);
+  var RGBdata3 = app.context.getImageData(x+pauli.width, y, dw, pauli.height);
+  var RGBdata4 = app.context.getImageData(x-dw, y+pauli.height, pauli.width+2*dw, dh);
+  //var allRGB = RGBdata1.data.concat(RGBdata2.data,RGBdata3.data,RGBdata4.data);
+  for (var i = 0; i < RGBdata1.data.length; i+=4){
+    if (RGBdata1.data[i] === 128 &&
+        RGBdata1.data[i+1] === 0 &&
+        RGBdata1.data[i+2] === 128){
+          console.log('hit');
+          return true;
+        }
+  }
+}
 
 
 function animateLoop() {
@@ -202,6 +221,7 @@ function animateLoop() {
   drawTentacles();
   pauli.drawPauli();
   pauli.updatePosition();
+  collideDetect();
   app.lastTime = now;
   var displayDt = document.querySelector('#dt');
   var displayDx = document.querySelector('#dx');
@@ -209,34 +229,7 @@ function animateLoop() {
   displayDt.innerHTML = 'dt:' + app.dt;
   displayDx.innerHTML = 'dx:' + pauli.dx;
   displayDy.innerHTML = 'dy:' + pauli.dy;
-  // if (app.northDown) pauli.dy -= 3;
-  // if (app.southDown) pauli.dy += 3;
-  // if (app.eastDown) pauli.dx += 3;
-  // if (app.westDown) pauli.dx -= 3;
-  // // If pauli is going to go off the screen, don't move pauli
-  // if (pauli.xPos + pauli.dx > app.width){
-  //   pauli.dx = 0;
-  //   pauli.xPos = app.width;
-  // } else if (pauli.xPos + pauli.dy < 0) {
-  //   pauli.dx = 0;
-  //   pauli.xPos = 0;
-  // } else if (pauli.yPos + pauli.dy > app.width) {
-  //   pauli.dy = 0;
-  //   pauli.yPos = app.width;
-  // } else if (pauli.yPos + pauli.dy < 0) {
-  //   pauli.dy = 0;
-  //   pauli.yPos = 0;
-  // }
-  // // update Pauli's position
-  // pauli.xPos += pauli.dx;
-  // pauli.yPos += pauli.dy;
-  // if (pauli.dx > 0) pauli.dx -= 1;
-  // else if (pauli.dx < 0) pauli.dx += 1;
-  // else if (pauli.dy > 3) pauli.dy -= 1.5;
-  // else if (pauli.dy < 3) pauli.dy += 1.5;
 }
-
-
 
 window.onload = function(){
   app.canvas = document.getElementById('canvas');
@@ -249,8 +242,6 @@ window.onload = function(){
     app.tentacleAngles.push(app.randomRange(-Math.PI/12,Math.PI/12));
     app.deltaAngles.push(Math.PI/3000);
   }
-
-  // var intervalID = window.setInterval(animateLoop, 50);
   app.intervalID = requestAnimationFrame(animateLoop);
   window.addEventListener('keydown',app.onKeyDown,true);
   window.addEventListener('keyup',app.onKeyUp,true);

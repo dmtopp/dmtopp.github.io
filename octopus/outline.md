@@ -51,7 +51,7 @@ Inside the animationLoop function, several things happen:
   collideDetect();
 ```
 
-The collideDetect function will be the hardest to implement.  The plan is to check rectangles around the character for pixels of a certain color like so (githubm/markdown doesn't want to rotate my image):
+The collideDetect function will be the hardest to implement.  The plan is to check rectangles around the character for pixels of a certain color like so (github/markdown doesn't want to rotate my image):
 
 ![hitbox diagram](https://raw.githubusercontent.com/dmtopp/dmtopp.github.io/master/octopus/IMG_0866.JPG)
 
