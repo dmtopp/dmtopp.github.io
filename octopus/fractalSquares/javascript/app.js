@@ -14,6 +14,12 @@ var app = app || {
   southDown: false,
   eastDown: false,
   westDown: false,
+  // variable to store animation interval
+  intervalID: null,
+  // variable to store starting point of time interval
+  lastTime: 0,
+  // time between animation frames
+  dt: null,
   // returns a number between the two parameters
   randomRange: function(min,max){
     if (min === 0) return Math.random() * max;
@@ -91,8 +97,9 @@ var pauli = {
   headRadius: 7,
   bodyLength: 28,
   bodyWidth: 10,
-  dx: 0,
-  dy: 3,
+  dx: 0.5,
+  dy: -0.5,
+  speed: 20,
   drawPauli: function(){
     app.context.fillStyle = 'orange';
     app.context.beginPath();
@@ -101,6 +108,34 @@ var pauli = {
     app.context.fill();
     app.context.fillStyle = 'black';
     app.context.fillRect(this.xPos+15,this.yPos+10,10,28);
+  },
+  updatePosition: function(){
+    if (app.northDown) this.dy -= (this.speed * app.dt);
+    if (app.southDown) this.dy += (this.speed * app.dt);
+    if (app.eastDown) this.dx += (this.speed * app.dt);
+    if (app.westDown) this.dx -= (this.speed * app.dt);
+    // If pauli is going to go off the screen, don't move pauli
+    if (this.xPos + this.dx > app.width){
+      this.dx *= -1;
+      // this.xPos = app.width;
+    } else if (this.xPos + this.dy < 0) {
+      this.dx *= -1;
+      // this.xPos = 0;
+    } else if (this.yPos + this.dy > app.width) {
+      this.dy *= -1;
+      // this.yPos = app.width;
+    } else if (this.yPos + this.dy < 0) {
+      this.dy *= -1;
+      // this.yPos = 0;
+    }
+    // update Pauli's position
+    this.xPos += this.dx;
+    this.yPos += this.dy;
+    // if (this.dx > 3) this.dx -= 1.5;
+    // else if (this.dx < -3) this.dx += 1.5;
+    // else if (this.dy > 3) this.dy -= 1.5;
+    // else if (this.dy < 3) this.dy += 1.5;
+
   }
 }
 
@@ -159,34 +194,46 @@ function drawTentacles(){
 
 
 function animateLoop() {
+  var now = Date.now();
+  app.dt = (now - app.lastTime)/1000;
+
+  app.intervalID = requestAnimationFrame(animateLoop);
   app.context.clearRect(0,0,app.width,app.width);
   drawTentacles();
   pauli.drawPauli();
-  if (app.northDown) pauli.dy -= 3;
-  if (app.southDown) pauli.dy += 3;
-  if (app.eastDown) pauli.dx += 3;
-  if (app.westDown) pauli.dx -= 3;
-  // If pauli is going to go off the screen, don't move pauli
-  if (pauli.xPos + pauli.dx > app.width){
-    pauli.dx = 0;
-    pauli.xPos = app.width;
-  } else if (pauli.xPos + pauli.dy < 0) {
-    pauli.dx = 0;
-    pauli.xPos = 0;
-  } else if (pauli.yPos + pauli.dy > app.width) {
-    pauli.dy = 0;
-    pauli.yPos = app.width;
-  } else if (pauli.yPos + pauli.dy < 0) {
-    pauli.dy = 0;
-    pauli.yPos = 0;
-  }
-  // update Pauli's position
-  pauli.xPos += pauli.dx;
-  pauli.yPos += pauli.dy;
-  if (pauli.dx > 0) pauli.dx -= 1;
-  else if (pauli.dx < 0) pauli.dx += 1;
-  else if (pauli.dy > 3) pauli.dy -= 1.5;
-  else if (pauli.dy < 3) pauli.dy += 1.5;
+  pauli.updatePosition();
+  app.lastTime = now;
+  var displayDt = document.querySelector('#dt');
+  var displayDx = document.querySelector('#dx');
+  var displayDy = document.querySelector('#dy');
+  displayDt.innerHTML = 'dt:' + app.dt;
+  displayDx.innerHTML = 'dx:' + pauli.dx;
+  displayDy.innerHTML = 'dy:' + pauli.dy;
+  // if (app.northDown) pauli.dy -= 3;
+  // if (app.southDown) pauli.dy += 3;
+  // if (app.eastDown) pauli.dx += 3;
+  // if (app.westDown) pauli.dx -= 3;
+  // // If pauli is going to go off the screen, don't move pauli
+  // if (pauli.xPos + pauli.dx > app.width){
+  //   pauli.dx = 0;
+  //   pauli.xPos = app.width;
+  // } else if (pauli.xPos + pauli.dy < 0) {
+  //   pauli.dx = 0;
+  //   pauli.xPos = 0;
+  // } else if (pauli.yPos + pauli.dy > app.width) {
+  //   pauli.dy = 0;
+  //   pauli.yPos = app.width;
+  // } else if (pauli.yPos + pauli.dy < 0) {
+  //   pauli.dy = 0;
+  //   pauli.yPos = 0;
+  // }
+  // // update Pauli's position
+  // pauli.xPos += pauli.dx;
+  // pauli.yPos += pauli.dy;
+  // if (pauli.dx > 0) pauli.dx -= 1;
+  // else if (pauli.dx < 0) pauli.dx += 1;
+  // else if (pauli.dy > 3) pauli.dy -= 1.5;
+  // else if (pauli.dy < 3) pauli.dy += 1.5;
 }
 
 
@@ -200,10 +247,11 @@ window.onload = function(){
   // all tentacles increment at pi/1000
   for (i=0; i < app.numTentacles; i++){
     app.tentacleAngles.push(app.randomRange(-Math.PI/12,Math.PI/12));
-    app.deltaAngles.push(Math.PI/1000);
+    app.deltaAngles.push(Math.PI/3000);
   }
 
-  var intervalID = window.setInterval(animateLoop, 50);
+  // var intervalID = window.setInterval(animateLoop, 50);
+  app.intervalID = requestAnimationFrame(animateLoop);
   window.addEventListener('keydown',app.onKeyDown,true);
   window.addEventListener('keyup',app.onKeyUp,true);
 };
