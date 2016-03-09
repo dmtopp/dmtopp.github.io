@@ -163,13 +163,27 @@ function Coin(){
   }
 }
 
+window.onload = function(){
+  app.canvas = document.getElementById('canvas');
+  app.context = app.canvas.getContext('2d');
+  app.width = canvas.width;
+  app.displayTime = document.querySelector('#game-time');
+  app.displayLives = document.querySelector('#lives');
+  app.displayScore = document.querySelector('#score');
+  levelStart();
+  window.addEventListener('keydown', app.onKeyDown, true);
+  window.addEventListener('keyup', app.onKeyUp, true);
+};
+
+
 function fractalSquares(x, y, sideLength, angle, limit){
   app.context.save();
   app.context.translate(x, y);
   app.context.rotate(angle);
   app.context.fillStyle = 'purple';
   app.context.fillRect(0, 0, sideLength, -sideLength);
-  app.context.fillRect(x, y, sideLength, sideLength);
+  app.context.fillStyle = 'rgba(0, 0, 0, 0.2)';
+  app.context.strokeRect(0, 0, sideLength, -sideLength);
   var x0 = 0;
   var y0 = -sideLength;
   var newSide = sideLength * 0.9;
@@ -250,6 +264,10 @@ function init() {
 
 function startGame(event){
   if (event.keyCode === 32){
+    if (app.levelElapsed){
+      app.levelStart += Date.now() - app.pauseTime;
+    }
+    init();
     // begin animation
     app.intervalID = requestAnimationFrame(animateLoop);
     // remove the event listener so we don't start mulitple games
@@ -277,7 +295,6 @@ function levelStart(){
     app.tentacleAngles.push(app.randomRange(-Math.PI / 12, Math.PI / 12));
     app.deltaAngles.push(deltaAngle);
   }
-  init();
   // add an event listener to start the game
   window.addEventListener('keydown', startGame, true);
 }
@@ -313,7 +330,13 @@ function animateLoop() {
     // stop the animation
     cancelAnimationFrame(app.intervalID);
     // reset pauli's position
-    init();
+    if (app.lives >= 0){
+      app.lives--;
+      // display lives, level, press space to start again etc.
+    } else {
+      // display GAMEOVER
+    }
+
   }
   // If the level is over (there are no more coins)
   if(app.coins.length === 0 && app.coinCounter > app.numCoins){
@@ -326,19 +349,7 @@ function animateLoop() {
   }
   // endpoint of frame time interval updates to start point
   app.lastTime = now;
-  var displayDt = document.querySelector('#dt');
-  var displayDx = document.querySelector('#dx');
-  var displayDy = document.querySelector('#dy');
-  displayDt.innerHTML = 'Time:' + Math.floor(app.levelElapsed);
-  displayDx.innerHTML = 'score: ' + app.score;
-  displayDy.innerHTML = 'now - respawnTime: ' + (now - app.respawnTime)/1000;
+  app.displayTime.innerHTML = 'Time:' + Math.floor(app.levelElapsed);
+  app.displayScore.innerHTML = 'score: ' + app.score;
+  app.displayLives.innerHTML = 'lives: ' + app.lives;
 }
-
-window.onload = function(){
-  app.canvas = document.getElementById('canvas');
-  app.context = app.canvas.getContext('2d');
-  app.width = canvas.width;
-  levelStart();
-  window.addEventListener('keydown', app.onKeyDown, true);
-  window.addEventListener('keyup', app.onKeyUp, true);
-};
