@@ -5,7 +5,7 @@ var app = app || {
   score: 0,
   lives: 0,
   numTentacles: 4,
-  numCoins: 1,
+  numCoins: 50,
   coinCounter: 0,
   // time at which pauli respawned
   respawnTime: 0,
@@ -146,7 +146,7 @@ var pauli = {
 } // end pauli object
 
 function Coin(){
-  this.dy = 0.5;
+  this.dy = 2;
   this.yPos = -20;
   // pick a random x position on the screen to start
   this.xPos = app.randomRange(50, 650);
@@ -345,7 +345,7 @@ function animateLoop() {
   drawTentacles();
   pauli.drawPauli();
   pauli.updatePosition();
-  if((app.intervalID + 300) % 500 === 0 &&
+  if((app.intervalID + 300) % 100 === 0 &&
       app.coinCounter <= app.numCoins){
     app.coins.push(new Coin());
     app.coinCounter++;
