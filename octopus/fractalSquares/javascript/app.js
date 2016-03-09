@@ -3,9 +3,13 @@ var app = app || {
   self: this,
   level: 1,
   score: 0,
+  lives: 0,
   numTentacles: 4,
   numCoins: 1,
   coinCounter: 0,
+  // time at which pauli respawned
+  respawnTime: 0,
+  pauseTime: 0,
   // number of squares in each tentacle
   limit: 20,
   tentacleAngles: [],
@@ -142,11 +146,12 @@ var pauli = {
 function Coin(){
   this.dy = 0.5;
   this.yPos = -20;
+  // pick a random x position on the screen to start
   this.xPos = app.randomRange(50, 650);
   this.drawCoin = function(){
     app.context.fillStyle = 'orange';
     app.context.beginPath();
-    app.context.arc(this.xPos, this.yPos, 10, 0, Math.PI*2);
+    app.context.arc(this.xPos, this.yPos, 10, 0, Math.PI * 2);
     app.context.closePath();
     app.context.fill();
   },
@@ -189,6 +194,7 @@ function drawTentacles(){
     app.context.rotate(angle);
     fractalSquares(0, 0, app.tentacleBaseWidth, app.tentacleAngles[i], app.limit);
     app.tentacleAngles[i] += app.deltaAngles[i];
+    // reverse the angle direction if is greater
     if (app.tentacleAngles[i] > Math.PI / 6 ||
         app.tentacleAngles[i] < -Math.PI / 6) {app.deltaAngles[i] = -app.deltaAngles[i]}
   }
@@ -205,6 +211,7 @@ function collideDetect(){
   //app.context.fillRect(x-dw,y-dh,pauli.width + 2*dw,pauli.height + 2*dh);
   if (allRGB){
     for (var i = 0; i < allRGB.data.length; i += 4){
+      // if the current pixel matches the color of the octopus tentacle
       if (allRGB.data[i] === 128 &&
           allRGB.data[i + 1] === 0 &&
           allRGB.data[i + 2] === 128){
@@ -214,16 +221,21 @@ function collideDetect(){
     }
   }
   app.coins.forEach(function(coin){
+    // if the coin's position is inside pauli's position
     if(x <= coin.xPos && coin.xPos <= x + pauli.width &&
        y <= coin.yPos && coin.yPos <= y + pauli.height){
          console.log('hit coin ' + app.coins.indexOf(coin));
+         //remove the coin
          app.coins.splice(app.coins.indexOf(coin), 1);
          app.score += 100;
        }
   })
 }
 
+
+// init sets pauli back to his initial position and draws the rest of the screen
 function init() {
+  app.respawnTime = Date.now();
   app.context.clearRect(0, 0, app.width, app.width);
   pauli.xPos = 40;
   pauli.yPos = 662;
@@ -238,17 +250,23 @@ function init() {
 
 function startGame(event){
   if (event.keyCode === 32){
+    // begin animation
     app.intervalID = requestAnimationFrame(animateLoop);
+    // remove the event listener so we don't start mulitple games
     window.removeEventListener('keydown', startGame, true);
   }
 }
 
 function levelStart(){
+  if (app.level === 1){
+    app.lives = 3;
+    app.score = 0;
+  }
   app.levelStart = Date.now();
+  app.levelElapsed = 0;
+  // clear angles
   app.tentacleAngles = [];
   app.deltaAngles = [];
-  console.log(app.tentacleAngles);
-  console.log(app.deltaAngles)
   // initialize tentacle angles
   // tentacles start at a random angle betweeen -Pi/2 and Pi/2
   // all tentacles increment at pi/3000
@@ -259,9 +277,8 @@ function levelStart(){
     app.tentacleAngles.push(app.randomRange(-Math.PI / 12, Math.PI / 12));
     app.deltaAngles.push(deltaAngle);
   }
-  console.log(app.tentacleAngles);
-  console.log(app.deltaAngles);
   init();
+  // add an event listener to start the game
   window.addEventListener('keydown', startGame, true);
 }
 
@@ -286,12 +303,23 @@ function animateLoop() {
     coin.updatePosition();
     coin.drawCoin();
   })
-  if(collideDetect()){
+  // if a collision is detected and pauli respawned more than two seconds ago
+  // this also runs collideDetect(), but the function only returns true on
+  // tentacle hits, not coin hits
+  if(collideDetect() && (now - app.respawnTime) / 1000 > 2){
+    app.pauseTime = Date.now();
+    // add an event listener to restart the game
     window.addEventListener('keydown', startGame, true);
+    // stop the animation
     cancelAnimationFrame(app.intervalID);
+    // reset pauli's position
     init();
   }
+  // If the level is over (there are no more coins)
   if(app.coins.length === 0 && app.coinCounter > app.numCoins){
+    // display time bonus score
+    // display new level screen
+    app.score += (Math.floor(app.levelElapsed) * 10)
     cancelAnimationFrame(app.intervalID);
     app.level++;
     levelStart();
@@ -301,9 +329,9 @@ function animateLoop() {
   var displayDt = document.querySelector('#dt');
   var displayDx = document.querySelector('#dx');
   var displayDy = document.querySelector('#dy');
-  displayDt.innerHTML = 'time:' + app.levelElapsed;
-  displayDx.innerHTML = 'interval ID: ' + app.intervalID;
-  displayDy.innerHTML = 'score: ' + app.score;
+  displayDt.innerHTML = 'Time:' + Math.floor(app.levelElapsed);
+  displayDx.innerHTML = 'score: ' + app.score;
+  displayDy.innerHTML = 'now - respawnTime: ' + (now - app.respawnTime)/1000;
 }
 
 window.onload = function(){
