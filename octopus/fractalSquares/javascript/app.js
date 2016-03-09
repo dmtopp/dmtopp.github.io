@@ -1,8 +1,8 @@
 // contains global variables and utility functions
-
 var app = app || {
   self: this,
   level: 1,
+  score: 0,
   numTentacles: 4,
   // number of squares in each tentacle
   limit: 20,
@@ -10,6 +10,7 @@ var app = app || {
   // keeps track of the direction each tentacle should be moving and by how much
   deltaAngles: [],
   tentacleBaseWidth: 50,
+  coins: [],
   // Variables to keep track of if keys are pressed
   northDown: false,
   southDown: false,
@@ -17,6 +18,8 @@ var app = app || {
   westDown: false,
   // variable to store animation interval
   intervalID: null,
+  levelStart: null,
+  levelElapsed: null,
   // variable to store starting point of time interval
   lastTime: 0,
   // time between animation frames
@@ -135,7 +138,21 @@ var pauli = {
   }
 } // end pauli object
 
-
+function Coin(){
+  this.dy = 0.5;
+  this.yPos = -20;
+  this.xPos = app.randomRange(50,650);
+  this.drawCoin = function(){
+    app.context.fillStyle = 'orange';
+    app.context.beginPath();
+    app.context.arc(this.xPos,this.yPos,10,0,Math.PI*2);
+    app.context.closePath();
+    app.context.fill();
+  },
+  this.updatePosition = function(){
+    this.yPos += this.dy;
+  }
+}
 
 
 
@@ -182,7 +199,7 @@ function collideDetect(){
   var dh = Math.abs(pauli.dy);
   var x = Math.floor(pauli.xPos);
   var y = Math.floor(pauli.yPos);
-  app.context.fillStyle = 'rgba(0,0,0,0.4)';
+  //app.context.fillStyle = 'rgba(0,0,0,0.4)';
   var allRGB = app.context.getImageData(x-dw,y-dh,pauli.width + 2*dw,pauli.height + 2*dh);
   //app.context.fillRect(x-dw,y-dh,pauli.width + 2*dw,pauli.height + 2*dh);
   if (allRGB){
@@ -190,11 +207,19 @@ function collideDetect(){
       if (allRGB.data[i] === 128 &&
           allRGB.data[i+1] === 0 &&
           allRGB.data[i+2] === 128){
-            console.log('hit');
+            console.log('tentacle hit');
             return true;
           }
     }
   }
+  app.coins.forEach(function(coin){
+    if(x <= coin.xPos && coin.xPos <= x + pauli.width &&
+       y <= coin.yPos && coin.yPos <= y + pauli.height){
+         console.log('hit coin ' + app.coins.indexOf(coin));
+         app.coins.splice(app.coins.indexOf(coin),1);
+         app.score += 100;
+       }
+  })
 }
 
 
@@ -204,6 +229,9 @@ function init() {
   pauli.yPos = 662;
   pauli.dx = 0;
   pauli.dy = 0;
+  app.coins.forEach(function(coin){
+    coin.drawCoin;
+  })
   drawTentacles();
   pauli.drawPauli();
 }
@@ -227,43 +255,62 @@ function startGame(event){
   }
 }
 
+function levelStart(){
+  app.levelStart = Date.now();
+  // initialize tentacle angles
+  // tentacles start at a random angle betweeen -Pi/2 and Pi/2
+  // all tentacles increment at pi/3000
+  app.numTentacles = app.level + 3;
+  var deltaAngle = Math.PI/3000 - 400*(app.level - 1);
+  for (i=0; i < app.numTentacles; i++){
+    app.tentacleAngles.push(app.randomRange(-Math.PI/12,Math.PI/12));
+    app.deltaAngles.push(deltaAngle);
+  }
+  init();
+  window.addEventListener('keydown',startGame,true);
+}
+
 
 function animateLoop() {
   var now = Date.now();
+  // update level timer
+  app.levelElapsed = (now-app.levelStart)/1000;
+  // time between animation frames
   app.dt = (now - app.lastTime)/1000;
   app.intervalID = requestAnimationFrame(animateLoop);
+  // clear screen
   app.context.clearRect(0,0,app.width,app.width);
   drawTentacles();
   pauli.drawPauli();
   pauli.updatePosition();
+  if((app.intervalID + 300) % 500 === 0){
+    app.coins.push(new Coin());
+  }
+  app.coins.forEach(function(coin){
+    coin.updatePosition();
+    coin.drawCoin();
+  })
   if(collideDetect()){
     window.addEventListener('keydown',startGame,true);
     cancelAnimationFrame(app.intervalID);
     init();
-
   }
+  // endpoint of frame time interval updates to start point
   app.lastTime = now;
   var displayDt = document.querySelector('#dt');
   var displayDx = document.querySelector('#dx');
   var displayDy = document.querySelector('#dy');
-  displayDt.innerHTML = 'intervalID:' + app.intervalID;
-  displayDx.innerHTML = 'dx:' + pauli.dx;
-  displayDy.innerHTML = 'dy:' + pauli.dy;
+  displayDt.innerHTML = 'time:' + app.levelElapsed;
+  displayDx.innerHTML = 'interval ID: ' + app.intervalID;
+  displayDy.innerHTML = 'score: ' + app.score;
 }
 
 window.onload = function(){
   app.canvas = document.getElementById('canvas');
   app.context = app.canvas.getContext('2d');
   app.width = canvas.width;
-  // initialize tentacle angles
-  // tentacles start at a random angle betweeen -Pi/2 and Pi/2
-  // all tentacles increment at pi/3000
-  for (i=0; i < app.numTentacles; i++){
-    app.tentacleAngles.push(app.randomRange(-Math.PI/12,Math.PI/12));
-    app.deltaAngles.push(Math.PI/3000);
-  }
-  init();
-  app.intervalID = requestAnimationFrame(animateLoop);
+
+  levelStart();
   window.addEventListener('keydown',app.onKeyDown,true);
   window.addEventListener('keyup',app.onKeyUp,true);
 
