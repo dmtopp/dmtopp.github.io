@@ -119,16 +119,16 @@ var pauli = {
     if (app.eastDown) this.dx += (this.speed * app.dt);
     if (app.westDown) this.dx -= (this.speed * app.dt);
     // Bounce pauli off the edges of the screen
-    if (this.xPos + this.width > app.width){
+    if (this.xPos + this.width + this.dx > app.width){
       this.dx *= -1;
       // this.xPos = app.width;
-    } else if (this.xPos < 0) {
+    } else if (this.xPos + this.dx < 0) {
       this.dx *= -1;
       // this.xPos = 0;
-    } else if (this.yPos + this.width > app.width) {
+    } else if (this.yPos + this.width + this.dy > app.width) {
       this.dy *= -1;
       // this.yPos = app.width;
-    } else if (this.yPos < 0) {
+    } else if (this.yPos + this.dy < 0) {
       this.dy *= -1;
       // this.yPos = 0;
     }
@@ -170,6 +170,10 @@ window.onload = function(){
   app.displayTime = document.querySelector('#game-time');
   app.displayLives = document.querySelector('#lives');
   app.displayScore = document.querySelector('#score');
+  app.overlay = document.querySelector('.overlay:last-child');
+  app.overlay.style.display = 'inline-block';
+  app.overlay.innerHTML = '<h1>Pauli and the Blocktopus</h1>'+
+                          '<h3>Press space to play</h3>'
   levelStart();
   window.addEventListener('keydown', app.onKeyDown, true);
   window.addEventListener('keyup', app.onKeyUp, true);
@@ -267,6 +271,8 @@ function startGame(event){
     if (app.levelElapsed){
       app.levelStart += Date.now() - app.pauseTime;
     }
+    app.overlay.innerHTML = '';
+    app.overlay.style.display = 'none';
     init();
     // begin animation
     app.intervalID = requestAnimationFrame(animateLoop);
@@ -329,7 +335,14 @@ function animateLoop() {
     window.addEventListener('keydown', startGame, true);
     // stop the animation
     cancelAnimationFrame(app.intervalID);
-    // reset pauli's position
+    app.overlay.style.display = 'inline-block';
+    app.overlay.innerHTML = '<h1>Lives: '+ app.lives +
+                            '</h1><h1>Score: ' + app.score +
+                            '</h1><h3>Press space to continue</h3>'
+    app.context.clearRect(0, 0, app.width, app.width);
+    pauli.updatePosition();
+    drawTentacles();
+    pauli.drawPauli();
     if (app.lives >= 0){
       app.lives--;
       // display lives, level, press space to start again etc.
