@@ -17,6 +17,7 @@ var app = app || {
   deltaAngles: [],
   tentacleBaseWidth: 50,
   coins: [],
+  bubbles: [],
   // Variables to keep track of if keys are pressed
   northDown: false,
   southDown: false,
@@ -41,17 +42,20 @@ var app = app || {
     ',' + Math.floor(this.randomRange(0, 255)) + ',' + Math.random() + ')';
   },
   onKeyDown: function(evt) {
+
     switch (evt.keyCode) {
       case 37:
         app.westDown = true;
         break;
       case 38:
+        evt.preventDefault();
         app.northDown = true;
         break;
       case 39:
         app.eastDown = true;
         break;
       case 40:
+        evt.preventDefault();
         app.southDown = true;
         break;
       case 87:
@@ -114,31 +118,29 @@ var pauli = {
     app.context.drawImage(image, this.xPos, this.yPos);
   },
   updatePosition: function(){
-    if (app.northDown) this.dy -= (this.speed * app.dt);
-    if (app.southDown) this.dy += (this.speed * app.dt);
-    if (app.eastDown) this.dx += (this.speed * app.dt);
-    if (app.westDown) this.dx -= (this.speed * app.dt);
+    if (app.northDown && this.dy <= 5) this.dy -= (this.speed * app.dt);
+    if (app.southDown && this.dy <= 5) this.dy += (this.speed * app.dt);
+    if (app.eastDown  && this.dx <= 5) this.dx += (this.speed * app.dt);
+    if (app.westDown  && this.dx <= 5) this.dx -= (this.speed * app.dt);
     // Bounce pauli off the edges of the screen
     if (this.xPos + this.width + this.dx > app.width){
-      this.dx *= -1;
+      this.dx *= -0.2;
       // this.xPos = app.width;
     } else if (this.xPos + this.dx < 0) {
-      this.dx *= -1;
+      this.dx *= -0.2;
       // this.xPos = 0;
     } else if (this.yPos + this.width + this.dy > app.width) {
-      this.dy *= -1;
+      this.dy *= -0.2;
       // this.yPos = app.width;
     } else if (this.yPos + this.dy < 0) {
-      this.dy *= -1;
+      this.dy *= -0.2;
       // this.yPos = 0;
     }
     // update Pauli's position
     this.xPos += this.dx;
     this.yPos += this.dy;
-    // if (this.dx > 3) this.dx -= 1.5;
-    // else if (this.dx < -3) this.dx += 1.5;
-    // else if (this.dy > 3) this.dy -= 1.5;
-    // else if (this.dy < 3) this.dy += 1.5;
+    this.dx = this.dx / 1.025;
+    this.dy = this.dy / 1.025;
 
   }
 } // end pauli object
@@ -163,6 +165,30 @@ function Coin(){
   }
 }
 
+function Bubble(){
+  this.xPos = pauli.xPos;
+  this.yPos = pauli.yPos;
+  this.dy = -0.7;
+  this.dx = 0.2;
+  this.drawBubble = function(){
+    app.context.strokeStyle = 'rgba(0,0,0,0.3)';
+    app.context.beginPath();
+    app.context.arc(this.xPos, this.yPos, 2, 0, Math.PI * 2);
+    app.context.closePath();
+    app.context.stroke();
+  }
+  this.updatePosition = function(){
+    this.yPos += this.dy;
+    this.xPos += this.dx;
+    if (app.intervalID % 200 === 0){
+      this.dx *= -1;
+    }
+    if (this.yPos < 0){
+      app.bubbles.splice(app.bubbles.indexOf(this), 1);
+    }
+  }
+}
+
 window.onload = function(){
   app.canvas = document.getElementById('canvas');
   app.context = app.canvas.getContext('2d');
@@ -173,7 +199,7 @@ window.onload = function(){
   app.overlay = document.querySelector('.overlay:last-child');
   app.overlay.style.display = 'inline-block';
   app.overlay.innerHTML = '<h1>Pauli and the Blocktopus</h1>'+
-                          '<h3>Press space to play</h3>'
+                          '<h3>Press space to play</h3>';
   levelStart();
   window.addEventListener('keydown', app.onKeyDown, true);
   window.addEventListener('keyup', app.onKeyUp, true);
@@ -253,6 +279,7 @@ function collideDetect(){
 
 // init sets pauli back to his initial position and draws the rest of the screen
 function init() {
+  app.bubbles = [];
   app.respawnTime = Date.now();
   app.context.clearRect(0, 0, app.width, app.width);
   pauli.xPos = 40;
@@ -261,7 +288,7 @@ function init() {
   pauli.dy = 0;
   app.coins.forEach(function(coin){
     coin.drawCoin;
-  })
+  });
   drawTentacles();
   pauli.drawPauli();
 }
@@ -285,6 +312,7 @@ function levelStart(){
   if (app.level === 1){
     app.lives = 3;
     app.score = 0;
+    app.numTentacles = 4;
   }
   app.levelStart = Date.now();
   app.levelElapsed = 0;
@@ -322,14 +350,21 @@ function animateLoop() {
     app.coins.push(new Coin());
     app.coinCounter++;
   }
+  if (app.intervalID % (Math.floor(app.randomRange(50,300))) === 0){
+    app.bubbles.push(new Bubble());
+  }
   app.coins.forEach(function(coin){
     coin.updatePosition();
     coin.drawCoin();
-  })
+  });
+  app.bubbles.forEach(function(bubble){
+    bubble.updatePosition();
+    bubble.drawBubble();
+  });
   // if a collision is detected and pauli respawned more than two seconds ago
   // this also runs collideDetect(), but the function only returns true on
   // tentacle hits, not coin hits
-  if(collideDetect() && (now - app.respawnTime) / 1000 > 2){
+  if(collideDetect() && (now - app.respawnTime) / 1000 > 1){
     app.pauseTime = Date.now();
     // add an event listener to restart the game
     window.addEventListener('keydown', startGame, true);
@@ -337,27 +372,52 @@ function animateLoop() {
     cancelAnimationFrame(app.intervalID);
     app.overlay.style.display = 'inline-block';
     app.overlay.innerHTML = '<h1>Lives: '+ app.lives +
-                            '</h1><h1>Score: ' + app.score +
-                            '</h1><h3>Press space to continue</h3>'
+                            '</h1><h2>Score: ' + app.score +
+                            '</h2><h3>Press space to continue</h3>';
     app.context.clearRect(0, 0, app.width, app.width);
     pauli.updatePosition();
     drawTentacles();
     pauli.drawPauli();
-    if (app.lives >= 0){
+    if (app.lives >= 1){
       app.lives--;
       // display lives, level, press space to start again etc.
     } else {
       // display GAMEOVER
+      window.removeEventListener('keydown', startGame, true);
+      app.level = 1;
+      app.overlay.style.display = 'inline-block';
+      app.overlay.innerHTML = '<h1>Game Over</h1>' +
+                              '<h2>Score: ' + app.score + '</h2>' +
+                              '<h3>Press space to play again</h3>';
+      levelStart();
+      app.coins = [];
+      app.bubbles = [];
+
     }
 
   }
   // If the level is over (there are no more coins)
   if(app.coins.length === 0 && app.coinCounter > app.numCoins){
+    app.overlay.style.display = 'inline-block';
+    app.score += (Math.floor(app.levelElapsed) * 10);
+    cancelAnimationFrame(app.intervalID);
     // display time bonus score
     // display new level screen
-    app.score += (Math.floor(app.levelElapsed) * 10)
-    cancelAnimationFrame(app.intervalID);
-    app.level++;
+    if (app.level > 7){
+      app.overlay.innerHTML = '<h1>You are the winner!</h1>'+
+                              '<h4>Time: ' + Math.floor(app.levelElapsed) +
+                              ' x 10 = ' + (Math.floor(app.levelElapsed) * 10) + '</h4>' +
+                              '<h4>Your Score: ' + app.score + '</h4>' +
+                              '<h3>Press space to play again!</h3>';
+      app.level = 1;
+    } else {
+      app.overlay.innerHTML = '<h1>Level ' + app.level + ' complete!</h1>'+
+                              '<h4>Time: ' + Math.floor(app.levelElapsed) +
+                              ' x 10 = ' + (Math.floor(app.levelElapsed) * 10) + '</h4>' +
+                              '<h4>Your Score: ' + app.score + '</h4>' +
+                              '<h3>Press space to start level ' + (app.level + 1) + '</h3>';
+      app.level++;
+    }
     levelStart();
   }
   // endpoint of frame time interval updates to start point
