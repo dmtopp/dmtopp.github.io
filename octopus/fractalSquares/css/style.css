@@ -18,6 +18,7 @@ body,html{
 }
 
 .row {
+  position: relative;
   width: 1110px;
   height: 100%;
   margin: auto;
@@ -59,7 +60,7 @@ body,html{
   width: 706px;
   height: 706px;
   /*background-color: rgba(10,80,255,0.2);*/
-  background-color: rgba(0,0,80,0.1);
+  background-color: rgba(0,80,160,0.1);
 }
 
 .overlay:last-child{
@@ -113,8 +114,12 @@ aside:first-child {
   float: left;
 }
 
+/* Kind of a brute force method but float: right wasn't cooperating */
 aside:last-child {
-  float:right;
+  position: absolute;
+  top: 0;
+  margin-left: 270px;
+  right: 900;
 }
 
 aside ul {

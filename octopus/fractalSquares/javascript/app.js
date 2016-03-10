@@ -16,9 +16,10 @@ var app = app || {
   // keeps track of the direction each tentacle should be moving and by how much
   deltaAngles: [],
   tentacleBaseWidth: 50,
-  // stores all coins and bubbles
+  // stores all coins and bubbles and fish
   coins: [],
   bubbles: [],
+  fish: [],
   // Variables to keep track of if keys are pressed
   northDown: false,
   southDown: false,
@@ -198,6 +199,57 @@ function Bubble(){
     }
     if (this.yPos < 0){
       app.bubbles.splice(app.bubbles.indexOf(this), 1);
+    }
+  }
+}
+
+function Fish(){
+  this.yPos = app.randomRange(100,400);
+  if (Math.random() > 0.5){
+    this.xPos = 750;
+    this.dx = -0.3;
+    this.drawFish = function(){
+      app.context.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+      app.context.fillStyle = 'rgba(0, 0, 0, 0.3)';
+      app.context.fillRect(this.xPos, this.yPos, 30, 15);
+      app.context.strokeRect(this.xPos, this.yPos, 30, 15);
+      app.context.fillRect(this.xPos + 21, this.yPos, -10, -5);
+      app.context.fillRect(this.xPos + 23, this.yPos - 5, -8, -3);
+      app.context.fillRect(this.xPos + 25, this.yPos - 8, -5, -3);
+      app.context.fillRect(this.xPos + 23, this.yPos + 13, -10, -5);
+      app.context.fillRect(this.xPos + 25, this.yPos + 16, -8, -3);
+      app.context.fillRect(this.xPos + 27, this.yPos + 19, -5, -3);
+      app.context.fillRect(this.xPos + 40, this.yPos + 7, -10, -5);
+      app.context.fillRect(this.xPos + 44, this.yPos + 2, -10, -3);
+      app.context.fillRect(this.xPos + 37, this.yPos + 7, -7, 3);
+      app.context.fillRect(this.xPos + 38, this.yPos + 13, -5, -3);
+      app.context.fillRect(this.xPos + 8, this.yPos + 4, -2, 2);
+    }
+  } else {
+    this.xPos = -50;
+    this.dx = 0.3;
+    this.drawFish = function(){
+      app.context.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+      app.context.fillStyle = 'rgba(0, 0, 0, 0.3)';
+      app.context.fillRect(this.xPos, this.yPos, 30, 15);
+      app.context.strokeRect(this.xPos, this.yPos, 30, 15);
+      app.context.fillRect(this.xPos+9, this.yPos, 10, -5);
+      app.context.fillRect(this.xPos+7, this.yPos-5, 8, -3);
+      app.context.fillRect(this.xPos+5, this.yPos-8, 5, -3);
+      app.context.fillRect(this.xPos+7, this.yPos+13, 10, -5);
+      app.context.fillRect(this.xPos+5, this.yPos+16, 8, -3);
+      app.context.fillRect(this.xPos+3, this.yPos+19, 5, -3);
+      app.context.fillRect(this.xPos-10, this.yPos+7, 10, -5);
+      app.context.fillRect(this.xPos-14, this.yPos+2, 10, -3);
+      app.context.fillRect(this.xPos-7, this.yPos+7, 7, 3);
+      app.context.fillRect(this.xPos-8, this.yPos+13, 5, -3);
+      app.context.fillRect(this.xPos+22, this.yPos+4, 2, 2);
+    }
+  };
+  this.updatePosition = function(){
+    this.xPos += this.dx;
+    if (this.xPos > 800 || this.xPos < -100){
+      app.fish.splice(app.fish.indexOf(this), 1);
     }
   }
 }
@@ -393,6 +445,9 @@ function animateLoop() {
   if (app.intervalID % (Math.floor(app.randomRange(50,300))) === 0){
     app.bubbles.push(new Bubble());
   }
+  if (app.intervalID % 1500 === 0){
+    app.fish.push(new Fish());
+  }
   // clear the screen
   app.context.clearRect(0, 0, app.width, app.width);
   // draw the tentacles
@@ -409,6 +464,10 @@ function animateLoop() {
   app.bubbles.forEach(function(bubble){
     bubble.updatePosition();
     bubble.drawBubble();
+  });
+  app.fish.forEach(function(fish){
+    fish.updatePosition();
+    fish.drawFish();
   });
   // if a collision is detected and pauli respawned more than two seconds ago
   // this also runs collideDetect(), but the function only returns true on
@@ -466,7 +525,6 @@ function animateLoop() {
       app.overlay.innerHTML = '<h1>Level ' + app.level + ' complete!</h1>'+
                               '<h4>Time: ' + Math.floor(app.levelElapsed) +
                               ' x 10 = ' + (Math.floor(app.levelElapsed) * 10) + '</h4>' +
-                              '<h4>'+app.numCoins+'</h4>'+
                               '<h4>Your Score: ' + app.score + '</h4>' +
                               '<h3>Press space to start level ' + (app.level + 1) + '</h3>';
       app.level++;

@@ -18,59 +18,59 @@ function randomRange(min,max){
 
 function squares(xMin,xMax,yMin,yMax,minLength,maxLength,color,numSquares){
   // context.fillStyle = colors[Math.floor(Math.random()*2)];
-  context.strokeStyle = 'rgba(0,0,0,0.2)';
-
-  for (var i = 0; i <= numSquares; i++){
-    context.fillStyle = colors3[Math.floor(Math.random()*3)];
-    var sideLength = randomRange(minLength,maxLength);
-    var x = randomRange(200,700);
-    var y = randomRange((-0.2) * x + 550, yMax);
-    context.fillRect(x,y,sideLength,-sideLength);
-    context.strokeRect(x,y,sideLength,-sideLength);
-  }
-
-  for (var i = 0; i <= numSquares; i++){
-    context.fillStyle = colors[Math.floor(Math.random()*3)];
-    var sideLength = randomRange(minLength,maxLength);
-    var x = randomRange(xMin,xMax);
-    var y = randomRange((0.5) * x + 400, yMax);
-    context.fillRect(x,y,sideLength,-sideLength);
-    context.strokeRect(x,y,sideLength,-sideLength);
-  }
-  for (var i = 0; i <= numSquares / 3; i++){
-    context.fillStyle = colors2[Math.floor(Math.random()*3)];
-    var sideLength = randomRange(minLength,maxLength);
-    var x = randomRange(300,700);
-    var y = randomRange((-0.5) * x + 850, yMax);
-    context.fillRect(x,y,sideLength,-sideLength);
-    context.strokeRect(x,y,sideLength,-sideLength);
-  }
-  for (var i = 0; i <= numSquares / 2; i++){
-    context.fillStyle = 'rgba(80,79,77,1)';
-    var sideLength = randomRange(minLength,maxLength);
-    var x = randomRange(0,700);
-    var y = randomRange(695,700);
-    context.fillRect(x,y,sideLength,-sideLength);
-    context.strokeRect(x,y,sideLength,-sideLength);
-  }
-  for (var i = 0; i <= 7; i++){
-    context.fillStyle = 'rgba(72,128,29,1)';
-    var x = randomRange(0,700);
-    var y = randomRange((0.5) * x + 400, 650);
-    var sideLength = 10;
-    for (var j = 0; j <= 7; j++){
-      context.fillRect(x,y,sideLength,sideLength);
-      context.strokeStyle = 'rgba(0,0,0,0.2)';
-      context.strokeRect(x,y,sideLength,sideLength);
-      if (j % 2 === 0){
-        x += sideLength;
-        y -= sideLength;
-      } else {
-        x -= sideLength;
-        y -= sideLength;
-      }
-    }
-  }
+  // context.strokeStyle = 'rgba(0,0,0,0.2)';
+  //
+  // for (var i = 0; i <= numSquares; i++){
+  //   context.fillStyle = colors3[Math.floor(Math.random()*3)];
+  //   var sideLength = randomRange(minLength,maxLength);
+  //   var x = randomRange(200,700);
+  //   var y = randomRange((-0.2) * x + 550, yMax);
+  //   context.fillRect(x,y,sideLength,-sideLength);
+  //   context.strokeRect(x,y,sideLength,-sideLength);
+  // }
+  //
+  // for (var i = 0; i <= numSquares; i++){
+  //   context.fillStyle = colors[Math.floor(Math.random()*3)];
+  //   var sideLength = randomRange(minLength,maxLength);
+  //   var x = randomRange(xMin,xMax);
+  //   var y = randomRange((0.5) * x + 400, yMax);
+  //   context.fillRect(x,y,sideLength,-sideLength);
+  //   context.strokeRect(x,y,sideLength,-sideLength);
+  // }
+  // for (var i = 0; i <= numSquares / 3; i++){
+  //   context.fillStyle = colors2[Math.floor(Math.random()*3)];
+  //   var sideLength = randomRange(minLength,maxLength);
+  //   var x = randomRange(300,700);
+  //   var y = randomRange((-0.5) * x + 850, yMax);
+  //   context.fillRect(x,y,sideLength,-sideLength);
+  //   context.strokeRect(x,y,sideLength,-sideLength);
+  // }
+  // for (var i = 0; i <= numSquares / 2; i++){
+  //   context.fillStyle = 'rgba(80,79,77,1)';
+  //   var sideLength = randomRange(minLength,maxLength);
+  //   var x = randomRange(0,700);
+  //   var y = randomRange(695,700);
+  //   context.fillRect(x,y,sideLength,-sideLength);
+  //   context.strokeRect(x,y,sideLength,-sideLength);
+  // }
+  // for (var i = 0; i <= 7; i++){
+  //   context.fillStyle = 'rgba(72,128,29,1)';
+  //   var x = randomRange(0,700);
+  //   var y = randomRange((0.5) * x + 400, 650);
+  //   var sideLength = 10;
+  //   for (var j = 0; j <= 7; j++){
+  //     context.fillRect(x,y,sideLength,sideLength);
+  //     context.strokeStyle = 'rgba(0,0,0,0.2)';
+  //     context.strokeRect(x,y,sideLength,sideLength);
+  //     if (j % 2 === 0){
+  //       x += sideLength;
+  //       y -= sideLength;
+  //     } else {
+  //       x -= sideLength;
+  //       y -= sideLength;
+  //     }
+  //   }
+  // }
   // context.lineWidth = 0.5;
   // context.strokeStyle = 'rgba(0,0,0,1)';
   // context.fillStyle = 'rgba(242,234,7,1)';
@@ -84,4 +84,41 @@ function squares(xMin,xMax,yMin,yMax,minLength,maxLength,color,numSquares){
   // context.arc(20, 20, 4, 0, Math.PI * 2);
   // context.closePath();
   // context.fill();
+
+  var x = 100;
+  var y = 100;
+  // right-facing fish
+  context.strokeStyle = 'rgba(0, 0, 0, 0.4)';
+  context.fillStyle = 'rgba(0, 0, 0, 0.3)';
+  context.fillRect(x, y, 30, 15);
+  context.strokeRect(x, y, 30, 15);
+  context.fillRect(x+9, y, 10, -5);
+  context.fillRect(x+7, y-5, 8, -3);
+  context.fillRect(x+5, y-8, 5, -3);
+  context.fillRect(x+7, y+13, 10, -5);
+  context.fillRect(x+5, y+16, 8, -3);
+  context.fillRect(x+3, y+19, 5, -3);
+  context.fillRect(x-10, y+7, 10, -5);
+  context.fillRect(x-14, y+2, 10, -3);
+  context.fillRect(x-7, y+7, 7, 3);
+  context.fillRect(x-8, y+13, 5, -3);
+  context.fillRect(x+22, y+4, 2, 2);
+
+  x += 200;
+  y += 200;
+
+  //left-facing fish
+  context.fillRect(x, y, 30, 15);
+  context.strokeRect(x, y, 30, 15);
+  context.fillRect(x+21, y, -10, -5);
+  context.fillRect(x+23, y-5, -8, -3);
+  context.fillRect(x+25, y-8, -5, -3);
+  context.fillRect(x+23, y+13, -10, -5);
+  context.fillRect(x+25, y+16, -8, -3);
+  context.fillRect(x+27, y+19, -5, -3);
+  context.fillRect(x + 40, y+7, -10, -5);
+  context.fillRect(x + 44, y+2, -10, -3);
+  context.fillRect(x + 37, y+7, -7, 3);
+  context.fillRect(x + 38, y+13, -5, -3);
+  context.fillRect(x+8, y+4, -2, 2);
 }
