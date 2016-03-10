@@ -20,7 +20,6 @@ body,html{
   display: inline-block;
   border: 3px solid black;
   margin:  auto;
-
   background-image: url('http://localhost:7888/dmtopp.github.io/octopus/fractalSquares/img/background.png');
   background-position: center;
 }

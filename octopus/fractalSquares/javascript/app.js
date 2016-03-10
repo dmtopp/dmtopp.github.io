@@ -226,7 +226,7 @@ function fractalSquares(x, y, sideLength, angle, limit){
   app.context.rotate(angle);
   app.context.fillStyle = 'purple';
   app.context.fillRect(0, 0, sideLength, -sideLength);
-  app.context.strokeStyle = 'rgba(0, 0, 0, 0.2)';
+  app.context.strokeStyle = 'rgba(0, 0, 0, 0.5)';
   app.context.strokeRect(0, 0, sideLength, -sideLength);
   var x0 = 0;
   var y0 = -sideLength;
@@ -237,7 +237,7 @@ function fractalSquares(x, y, sideLength, angle, limit){
   app.context.restore();
 }
 
-// draw Tentacles draws 
+// draw Tentacles draws
 function drawTentacles(){
   // Set starting point
   var x = (app.width / 2) - (app.tentacleBaseWidth / 2);
