@@ -17,11 +17,17 @@ body,html{
   margin-top: 10px;
 }
 
+.row {
+  width: 1110px;
+  height: 100%;
+  margin: auto;
+}
+
 #canvas {
   display: inline-block;
   border: 3px solid black;
   margin:  auto;
-  background-image: url('http://localhost:7888/dmtopp.github.io/octopus/fractalSquares/img/squares-background.png');
+  background-image: url('http://localhost:7888/dmtopp.github.io/octopus/fractalSquares/img/squares-background2.png');
   background-position: center;
   background-size: cover;
 }
@@ -112,4 +118,31 @@ header li {
   display: inline;
   z-index: 102;
   text-shadow: 1px 1px 1px black;
+}
+
+aside {
+  display: inline-block;
+  /*float: left;*/
+  width: 195px;
+  background-color: rgba(0,0,0,0.3);
+  height: 706px;
+  text-align: center;
+}
+
+aside:first-child {
+  float: left;
+}
+
+aside:last-child {
+  float:right;
+}
+
+aside ul {
+  padding: 0;
+}
+
+aside li {
+  size: 20px;
+  list-style-type: none;
+  margin-bottom: 80px;
 }

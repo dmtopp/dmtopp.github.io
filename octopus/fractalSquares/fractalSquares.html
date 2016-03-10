@@ -9,19 +9,29 @@
   </head>
   <body>
     <div class="container">
-      <div id="game-container">
-        <canvas id="canvas" width="700" height="700"></canvas>
-        <header>
+      <div class="row">
+        <aside>
           <ul>
-            <li id="game-time">Time:</li>
-            <li id="score">Score:</li>
-            <li id="lives">Lives:</li>
+            <li>HOW TO PLAY:</li>
+            <li>Use → ← ↑ ↓ or WASD to move</li>
+            <li>Collect coins for more points</li>
+            <li>Look out for tentacles!</li>
           </ul>
-        </header>
-        <div class="overlay"></div>
-        <div class="overlay"></div>
-        <div class="overlay"></div>
-
+        </aside>
+        <div id="game-container">
+          <canvas id="canvas" width="700" height="700"></canvas>
+          <header>
+            <ul>
+              <li id="game-time">Time:</li>
+              <li id="score">Score:</li>
+              <li id="lives">Lives:</li>
+            </ul>
+          </header>
+          <div class="overlay"></div>
+          <div class="overlay"></div>
+          <div class="overlay"></div>
+        </div>
+        <aside></aside>
       </div>
     </div>
   </body>
