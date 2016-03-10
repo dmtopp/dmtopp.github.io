@@ -5,7 +5,7 @@ var app = app || {
   score: 0,
   lives: 0,
   numTentacles: 4,
-  numCoins: 50,
+  numCoins: 15,
   coinCounter: 0,
   // time at which pauli respawned
   respawnTime: 0,
@@ -16,6 +16,7 @@ var app = app || {
   // keeps track of the direction each tentacle should be moving and by how much
   deltaAngles: [],
   tentacleBaseWidth: 50,
+  // stores all coins and bubbles
   coins: [],
   bubbles: [],
   // Variables to keep track of if keys are pressed
@@ -42,9 +43,9 @@ var app = app || {
     ',' + Math.floor(this.randomRange(0, 255)) + ',' + Math.random() + ')';
   },
   onKeyDown: function(evt) {
-
     switch (evt.keyCode) {
       case 37:
+        pauli.faceLeft = true;
         app.westDown = true;
         break;
       case 38:
@@ -52,6 +53,7 @@ var app = app || {
         app.northDown = true;
         break;
       case 39:
+        pauli.faceLeft = false;
         app.eastDown = true;
         break;
       case 40:
@@ -62,12 +64,14 @@ var app = app || {
         app.northDown = true;
         break;
       case 65:
+        pauli.faceLeft = true;
         app.westDown = true;
         break;
       case 83:
         app.southDown = true;
         break;
       case 68:
+        pauli.faceLeft = false;
         app.eastDown = true;
         break;
     }
@@ -111,10 +115,14 @@ var pauli = {
   dx: 0.5,
   dy: -0.5,
   speed: 12,
+  faceLeft: false,
   drawPauli: function(){
     var image = new Image();
-    // image.crossOrigin = "Anonymous";
-    image.src = 'img/pauli-sprite.png';
+    if(this.faceLeft){
+      image.src = 'img/pauli-sprite-left.png';
+    }else {
+      image.src = 'img/pauli-sprite.png';
+    }
     app.context.drawImage(image, this.xPos, this.yPos);
   },
   updatePosition: function(){
@@ -151,11 +159,14 @@ function Coin(){
   // pick a random x position on the screen to start
   this.xPos = app.randomRange(50, 650);
   this.drawCoin = function(){
-    app.context.fillStyle = 'orange';
-    app.context.beginPath();
-    app.context.arc(this.xPos, this.yPos, 10, 0, Math.PI * 2);
-    app.context.closePath();
-    app.context.fill();
+    var image = new Image();
+    image.src = 'img/coin.png';
+    app.context.drawImage(image, this.xPos, this.yPos);
+    // app.context.fillStyle = 'orange';
+    // app.context.beginPath();
+    // app.context.arc(this.xPos, this.yPos, 10, 0, Math.PI * 2);
+    // app.context.closePath();
+    // app.context.fill();
   },
   this.updatePosition = function(){
     this.yPos += this.dy;
@@ -171,10 +182,12 @@ function Bubble(){
   this.dy = -0.7;
   this.dx = 0.2;
   this.drawBubble = function(){
-    app.context.strokeStyle = 'rgba(0,0,0,0.3)';
+    app.context.strokeStyle = 'rgba(255,255,255,0.3)';
+    app.context.fillStyle = 'rgba(255,255,255,0.2)';
     app.context.beginPath();
-    app.context.arc(this.xPos, this.yPos, 2, 0, Math.PI * 2);
+    app.context.arc(this.xPos, this.yPos, app.randomRange(2,3), 0, Math.PI * 2);
     app.context.closePath();
+    app.context.fill();
     app.context.stroke();
   }
   this.updatePosition = function(){
@@ -198,21 +211,22 @@ window.onload = function(){
   app.displayScore = document.querySelector('#score');
   app.overlay = document.querySelector('.overlay:last-child');
   app.overlay.style.display = 'inline-block';
-  app.overlay.innerHTML = '<h1>Pauli and the Blocktopus</h1>'+
+  app.overlay.innerHTML = '<h1>BLOCKTOPUS</h1>'+
                           '<h3>Press space to play</h3>';
   levelStart();
   window.addEventListener('keydown', app.onKeyDown, true);
   window.addEventListener('keyup', app.onKeyUp, true);
 };
 
-
+// fractalSquares draws one tentacle
+// by recusively drawing smaller and smaller squares
 function fractalSquares(x, y, sideLength, angle, limit){
   app.context.save();
   app.context.translate(x, y);
   app.context.rotate(angle);
   app.context.fillStyle = 'purple';
   app.context.fillRect(0, 0, sideLength, -sideLength);
-  app.context.fillStyle = 'rgba(0, 0, 0, 0.2)';
+  app.context.strokeStyle = 'rgba(0, 0, 0, 0.2)';
   app.context.strokeRect(0, 0, sideLength, -sideLength);
   var x0 = 0;
   var y0 = -sideLength;
@@ -223,6 +237,7 @@ function fractalSquares(x, y, sideLength, angle, limit){
   app.context.restore();
 }
 
+// draw Tentacles draws 
 function drawTentacles(){
   // Set starting point
   var x = (app.width / 2) - (app.tentacleBaseWidth / 2);
@@ -245,6 +260,12 @@ function drawTentacles(){
   app.context.restore();
 }
 
+// function collideDetect
+// does two kinds of collision detection
+// for tentacles, it checks a box around pauli to see if any pixels are purple
+// for coins, it checks to see if the coordinates of the coin are within
+// the box that pauli takes up
+// returns true if pauli collides with a tentacle
 function collideDetect(){
   var dw = Math.abs(pauli.dx);
   var dh = Math.abs(pauli.dy);
@@ -266,8 +287,8 @@ function collideDetect(){
   }
   app.coins.forEach(function(coin){
     // if the coin's position is inside pauli's position
-    if(x <= coin.xPos && coin.xPos <= x + pauli.width &&
-       y <= coin.yPos && coin.yPos <= y + pauli.height){
+    if(x <= coin.xPos + 10 && coin.xPos + 10 <= x + pauli.width &&
+       y <= coin.yPos + 10 && coin.yPos + 10 <= y + pauli.height){
          console.log('hit coin ' + app.coins.indexOf(coin));
          //remove the coin
          app.coins.splice(app.coins.indexOf(coin), 1);
@@ -293,6 +314,10 @@ function init() {
   pauli.drawPauli();
 }
 
+// function startGame
+// takes an event from an event handler
+// if it is the space bar, it clears any title cards (overlay div)
+// and starts the game
 function startGame(event){
   if (event.keyCode === 32){
     if (app.levelElapsed){
@@ -308,6 +333,11 @@ function startGame(event){
   }
 }
 
+// function levelStart
+// is called at the beginning of a new level
+// it re-initializes the level timer and tentacle data
+// and then creates an event handler to start the game
+
 function levelStart(){
   if (app.level === 1){
     app.lives = 3;
@@ -322,8 +352,9 @@ function levelStart(){
   // initialize tentacle angles
   // tentacles start at a random angle betweeen -Pi/2 and Pi/2
   // all tentacles increment at pi/3000
-  app.numCoins += app.level;
+  app.numCoins += 10;
   app.numTentacles += 1;
+  // tentacles move faster as the level increases
   var deltaAngle = Math.PI / (3000 - 400 * (app.level - 1));
   for (i = 0; i < app.numTentacles; i++){
     app.tentacleAngles.push(app.randomRange(-Math.PI / 12, Math.PI / 12));
@@ -333,6 +364,17 @@ function levelStart(){
   window.addEventListener('keydown', startGame, true);
 }
 
+
+// function animateLoop
+// holds the main body of the game
+// first the function updates the game timers
+// then it requests a new animation frame to continue the loop
+// then it adds new coins or bubbles at set intervals
+// then it updates the position of everything on the screen and draws it
+// it reacts to any collisions with coins or tentacles
+// then it checks to see if the level is over
+// finally it updates the game information at the top of the screen
+
 function animateLoop() {
   var now = Date.now();
   // update level timer
@@ -340,23 +382,29 @@ function animateLoop() {
   // time between animation frames
   app.dt = (now - app.lastTime) / 1000;
   app.intervalID = requestAnimationFrame(animateLoop);
-  // clear screen
-  app.context.clearRect(0, 0, app.width, app.width);
-  drawTentacles();
-  pauli.drawPauli();
-  pauli.updatePosition();
+  // add a new coin every 100 frames or so
   if((app.intervalID + 300) % 100 === 0 &&
       app.coinCounter <= app.numCoins){
     app.coins.push(new Coin());
     app.coinCounter++;
   }
+  // add a new bubble at random intervals
   if (app.intervalID % (Math.floor(app.randomRange(50,300))) === 0){
     app.bubbles.push(new Bubble());
   }
+  // clear the screen
+  app.context.clearRect(0, 0, app.width, app.width);
+  // draw the tentacles
+  drawTentacles();
+  // update pauli's positon and draw pauli
+  pauli.updatePosition();
+  pauli.drawPauli();
+  // update coin positions and draw coins
   app.coins.forEach(function(coin){
     coin.updatePosition();
     coin.drawCoin();
   });
+  // update bubble positions and draw bubbles
   app.bubbles.forEach(function(bubble){
     bubble.updatePosition();
     bubble.drawBubble();
@@ -370,16 +418,17 @@ function animateLoop() {
     window.addEventListener('keydown', startGame, true);
     // stop the animation
     cancelAnimationFrame(app.intervalID);
-    app.overlay.style.display = 'inline-block';
-    app.overlay.innerHTML = '<h1>Lives: '+ app.lives +
-                            '</h1><h2>Score: ' + app.score +
-                            '</h2><h3>Press space to continue</h3>';
-    app.context.clearRect(0, 0, app.width, app.width);
-    pauli.updatePosition();
-    drawTentacles();
-    pauli.drawPauli();
+    // pauli.updatePosition();
+
+    // pauli.drawPauli();
     if (app.lives >= 1){
       app.lives--;
+      app.overlay.style.display = 'inline-block';
+      app.overlay.innerHTML = '<h1>Lives: '+ app.lives +
+                              '</h1><h2>Score: ' + app.score +
+                              '</h2><h3>Press space to continue</h3>';
+      app.context.clearRect(0, 0, app.width, app.width);
+      drawTentacles();
       // display lives, level, press space to start again etc.
     } else {
       // display GAMEOVER
@@ -398,11 +447,12 @@ function animateLoop() {
   }
   // If the level is over (there are no more coins)
   if(app.coins.length === 0 && app.coinCounter > app.numCoins){
+    // show overlay div for words
     app.overlay.style.display = 'inline-block';
+    // add bonus points for the time
     app.score += (Math.floor(app.levelElapsed) * 10);
     cancelAnimationFrame(app.intervalID);
-    // display time bonus score
-    // display new level screen
+    // end the game if level > 7
     if (app.level > 7){
       app.overlay.innerHTML = '<h1>You are the winner!</h1>'+
                               '<h4>Time: ' + Math.floor(app.levelElapsed) +
@@ -410,6 +460,7 @@ function animateLoop() {
                               '<h4>Your Score: ' + app.score + '</h4>' +
                               '<h3>Press space to play again!</h3>';
       app.level = 1;
+    // display score and next level screen
     } else {
       app.overlay.innerHTML = '<h1>Level ' + app.level + ' complete!</h1>'+
                               '<h4>Time: ' + Math.floor(app.levelElapsed) +
@@ -422,6 +473,7 @@ function animateLoop() {
   }
   // endpoint of frame time interval updates to start point
   app.lastTime = now;
+  // update the display at the top of the game
   app.displayTime.innerHTML = 'Time:' + Math.floor(app.levelElapsed);
   app.displayScore.innerHTML = 'score: ' + app.score;
   app.displayLives.innerHTML = 'lives: ' + app.lives;
