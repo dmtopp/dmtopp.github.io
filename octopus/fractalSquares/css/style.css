@@ -23,33 +23,21 @@ body,html{
   margin: auto;
 }
 
+#game-container{
+  margin: auto;
+  position: relative;
+  width: 699px;
+  height: 699px;
+}
+
 #canvas {
   display: inline-block;
   border: 3px solid black;
-  margin:  auto;
+  margin: auto;
   background-image: url('http://localhost:7888/dmtopp.github.io/octopus/fractalSquares/img/squares-background2.png');
   background-position: center;
   background-size: cover;
 }
-
-/*header {
-  margin: auto;
-  width: 700px;
-  padding: 0;
-  z-index: 100;
-}
-
-header ul {
-  list-style: none;
-  padding: 0;
-  margin: 8px;
-  z-index: 101;
-}
-
-header li {
-  display: inline;
-  z-index: 102;
-}*/
 
 #time, #score{
   float: left;
@@ -57,13 +45,6 @@ header li {
 
 #lives{
   float: right;
-}
-
-#game-container{
-  margin: auto;
-  position: relative;
-  width: 699px;
-  height: 699px;
 }
 
 .overlay, #canvas, header{
@@ -122,7 +103,6 @@ header li {
 
 aside {
   display: inline-block;
-  /*float: left;*/
   width: 195px;
   background-color: rgba(0,0,0,0.3);
   height: 706px;
