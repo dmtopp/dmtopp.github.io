@@ -182,10 +182,10 @@ function Bubble(){
   this.dy = -0.7;
   this.dx = 0.2;
   this.drawBubble = function(){
-    app.context.strokeStyle = 'rgba(255,255,255,0.3)';
-    app.context.fillStyle = 'rgba(255,255,255,0.2)';
+    app.context.strokeStyle = 'rgba(255,255,255,0.7)';
+    app.context.fillStyle = 'rgba(123,213,248,0.5)';
     app.context.beginPath();
-    app.context.arc(this.xPos, this.yPos, app.randomRange(2,3), 0, Math.PI * 2);
+    app.context.arc(this.xPos, this.yPos, app.randomRange(3,4), 0, Math.PI * 2);
     app.context.closePath();
     app.context.fill();
     app.context.stroke();
@@ -346,6 +346,7 @@ function levelStart(){
   }
   app.levelStart = Date.now();
   app.levelElapsed = 0;
+  app.coinCounter = 0;
   // clear angles
   app.tentacleAngles = [];
   app.deltaAngles = [];
@@ -465,6 +466,7 @@ function animateLoop() {
       app.overlay.innerHTML = '<h1>Level ' + app.level + ' complete!</h1>'+
                               '<h4>Time: ' + Math.floor(app.levelElapsed) +
                               ' x 10 = ' + (Math.floor(app.levelElapsed) * 10) + '</h4>' +
+                              '<h4>'+app.numCoins+'</h4>'+
                               '<h4>Your Score: ' + app.score + '</h4>' +
                               '<h3>Press space to start level ' + (app.level + 1) + '</h3>';
       app.level++;

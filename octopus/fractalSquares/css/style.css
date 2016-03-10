@@ -7,6 +7,7 @@ body,html{
   font-size: 24px;
   text-shadow: 1px 1px 2px black;
   color: rgba(201, 181, 150, 1);
+  background-color: rgba(0,0,0,0.5);
 }
 
 .container {
@@ -20,30 +21,29 @@ body,html{
   display: inline-block;
   border: 3px solid black;
   margin:  auto;
-  background-image: url('http://localhost:7888/dmtopp.github.io/octopus/fractalSquares/img/background.png');
+  background-image: url('http://localhost:7888/dmtopp.github.io/octopus/fractalSquares/img/squares-background.png');
   background-position: center;
+  background-size: cover;
 }
 
-#pauli{
-  display: none;
-}
-
-#game-info {
+/*header {
   margin: auto;
   width: 700px;
   padding: 0;
+  z-index: 100;
 }
 
-#game-info ul {
+header ul {
   list-style: none;
   padding: 0;
   margin: 8px;
+  z-index: 101;
 }
 
-#game-info li {
+header li {
   display: inline;
-  z-index: 100;
-}
+  z-index: 102;
+}*/
 
 #time, #score{
   float: left;
@@ -56,11 +56,11 @@ body,html{
 #game-container{
   margin: auto;
   position: relative;
-  width: 700px;
-  height: 700px;
+  width: 699px;
+  height: 699px;
 }
 
-.overlay, #canvas, #game-info{
+.overlay, #canvas, header{
   position: absolute;
   width: 100%;
   height: 100%;
@@ -69,14 +69,18 @@ body,html{
 }
 
 .overlay{
-  background-color: rgba(10,80,255,0.2);
-  border: 3px solid black;
+  width: 706px;
+  height: 706px;
+  /*background-color: rgba(10,80,255,0.2);*/
+  background-color: rgba(0,0,80,0.1);
 }
 
 .overlay:last-child{
   background-color: rgba(0,0,0,0.2);
   display: none;
-  border: 3px solid black;
+  width: 706px;
+  height: 706px;
+  font-family: 'IM Fell English SC', serif;
 }
 
 .overlay h1 {
@@ -86,4 +90,26 @@ body,html{
 
 .overlay h3 {
   margin-top: 10px;
+}
+
+header {
+  margin: auto;
+  width: 706px;
+  padding: 0;
+  z-index: 100;
+  height: 42px;
+  background-color: rgba(60,60,60,0.1)
+}
+
+header ul {
+  list-style: none;
+  padding: 0;
+  margin: 7px;
+  z-index: 101;
+}
+
+header li {
+  display: inline;
+  z-index: 102;
+  text-shadow: 1px 1px 1px black;
 }
