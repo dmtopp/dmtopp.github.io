@@ -8,7 +8,7 @@ Pauli is a deep sea diver in charge of recovering lost treasure from a shipwreck
 
 ## How to run the game
 
-The game runs in the browser! Just navigate to [here](http://dmtopp.github.io/project1/index.html) to get started.
+This game runs in the browser! Just navigate [here](http://dmtopp.github.io/project1/index.html) to get started.
 
 ## Technologies Used
 
@@ -46,9 +46,13 @@ Because the movement mechanics reverse Pauli's direction near the edge of the sc
 
 The game does not resize well and at this point only runs in a static box of 700x700 pixels. This may cause issues with the page when running the game on different screen sizes.
 
+#### Graphics glitches
+
+When coins, bubbles, and fish delete themselves after they have left the screen, it causes all of the other objects of that type to disappear for a frame or so.  So far I have not been able to figure out the cause of this.
+
 #### Other browsers?
 
-I have only tested this game in chrome.  I have no idea if it will run on other browsers. 
+I have only tested this game in chrome.  I have no idea if it will run on other browsers.
 
 ## The future of Blocktopus
 
@@ -56,7 +60,8 @@ Although I met most of my goals for what I wanted to accomplish during the timel
 
 + It's quiet... too quiet.  The game needs sounds and music!
 + A new challenger has appeared!  I started to work on 2-player mode but ultimately wasn't able to get it finished before the project deadline.  It's always more fun to play with your friends!
-+ Randomized backgrounds!  The background of the game is a pattern of random squares created using the code in background.js.  In the future I would like to find a way to randomize the background at the beginning of every level.
++ Randomized backgrounds!  The background of the game is a pattern of random squares created using the code in background.js.  In the future I would like to find a way to randomize the background at the beginning of every level.  I would also like to add more small fish to make the top part of the background more interesting.
++ Refine the scoring system - At the moment it doesn't make much sense for the time you stay alive to affect your score as each level takes roughly the same amount of time each time you play it.  Revamping the way the game is scored would make the score more meaningful.  I would also like to implement a way to keep track of how many coins the player collected out of the total coins in the level and display it at the end of each level (for example:  You collected 18/25 coins!).
 
 
 **Thanks for reading!  I hope you enjoyed the game.**

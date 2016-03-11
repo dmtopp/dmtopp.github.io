@@ -449,6 +449,10 @@ function animateLoop() {
   }
   // clear the screen
   app.context.clearRect(0, 0, app.width, app.width);
+  app.fish.forEach(function(fish){
+    fish.updatePosition();
+    fish.drawFish();
+  });
   // draw the tentacles
   drawTentacles();
   // update pauli's positon and draw pauli
@@ -464,11 +468,8 @@ function animateLoop() {
     bubble.updatePosition();
     bubble.drawBubble();
   });
-  app.fish.forEach(function(fish){
-    fish.updatePosition();
-    fish.drawFish();
-  });
-  // if a collision is detected and pauli respawned more than two seconds ago
+  // only detects collisions if pauli has been alive for more than a second
+  // this gives the player time to move if they respawn on top of a tentacle
   // this also runs collideDetect(), but the function only returns true on
   // tentacle hits, not coin hits
   if(collideDetect() && (now - app.respawnTime) / 1000 > 1){

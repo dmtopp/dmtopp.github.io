@@ -1,3 +1,8 @@
+// This is the code that I used to draw the background as well as figure out how to draw fishes
+// At the moment it's probably not implemented in the best way-- it was something that
+// I was playing around with that I ended up putting in the game.  In future versions this could
+// be done better.
+
 var canvas;
 var context;
 var colors = ['rgba(206,189,204,1)','rgba(142,135,155,1)','rgba(152,131,125,1)'];
@@ -17,73 +22,61 @@ function randomRange(min,max){
 }
 
 function squares(xMin,xMax,yMin,yMax,minLength,maxLength,color,numSquares){
-  // context.fillStyle = colors[Math.floor(Math.random()*2)];
-  // context.strokeStyle = 'rgba(0,0,0,0.2)';
-  //
-  // for (var i = 0; i <= numSquares; i++){
-  //   context.fillStyle = colors3[Math.floor(Math.random()*3)];
-  //   var sideLength = randomRange(minLength,maxLength);
-  //   var x = randomRange(200,700);
-  //   var y = randomRange((-0.2) * x + 550, yMax);
-  //   context.fillRect(x,y,sideLength,-sideLength);
-  //   context.strokeRect(x,y,sideLength,-sideLength);
-  // }
-  //
-  // for (var i = 0; i <= numSquares; i++){
-  //   context.fillStyle = colors[Math.floor(Math.random()*3)];
-  //   var sideLength = randomRange(minLength,maxLength);
-  //   var x = randomRange(xMin,xMax);
-  //   var y = randomRange((0.5) * x + 400, yMax);
-  //   context.fillRect(x,y,sideLength,-sideLength);
-  //   context.strokeRect(x,y,sideLength,-sideLength);
-  // }
-  // for (var i = 0; i <= numSquares / 3; i++){
-  //   context.fillStyle = colors2[Math.floor(Math.random()*3)];
-  //   var sideLength = randomRange(minLength,maxLength);
-  //   var x = randomRange(300,700);
-  //   var y = randomRange((-0.5) * x + 850, yMax);
-  //   context.fillRect(x,y,sideLength,-sideLength);
-  //   context.strokeRect(x,y,sideLength,-sideLength);
-  // }
-  // for (var i = 0; i <= numSquares / 2; i++){
-  //   context.fillStyle = 'rgba(80,79,77,1)';
-  //   var sideLength = randomRange(minLength,maxLength);
-  //   var x = randomRange(0,700);
-  //   var y = randomRange(695,700);
-  //   context.fillRect(x,y,sideLength,-sideLength);
-  //   context.strokeRect(x,y,sideLength,-sideLength);
-  // }
-  // for (var i = 0; i <= 7; i++){
-  //   context.fillStyle = 'rgba(72,128,29,1)';
-  //   var x = randomRange(0,700);
-  //   var y = randomRange((0.5) * x + 400, 650);
-  //   var sideLength = 10;
-  //   for (var j = 0; j <= 7; j++){
-  //     context.fillRect(x,y,sideLength,sideLength);
-  //     context.strokeStyle = 'rgba(0,0,0,0.2)';
-  //     context.strokeRect(x,y,sideLength,sideLength);
-  //     if (j % 2 === 0){
-  //       x += sideLength;
-  //       y -= sideLength;
-  //     } else {
-  //       x -= sideLength;
-  //       y -= sideLength;
-  //     }
-  //   }
-  // }
-  // context.lineWidth = 0.5;
-  // context.strokeStyle = 'rgba(0,0,0,1)';
-  // context.fillStyle = 'rgba(242,234,7,1)';
-  // context.beginPath();
-  // context.arc(20, 20, 10, 0, Math.PI * 2);
-  // context.closePath();
-  // context.fill();
-  // context.stroke();
-  // context.fillStyle = 'rgba(212,210,217,1)';
-  // context.beginPath();
-  // context.arc(20, 20, 4, 0, Math.PI * 2);
-  // context.closePath();
-  // context.fill();
+  // Draw a BUNCH of squares
+  context.fillStyle = colors[Math.floor(Math.random()*2)];
+  context.strokeStyle = 'rgba(0,0,0,0.2)';
+
+  for (var i = 0; i <= numSquares; i++){
+    context.fillStyle = colors3[Math.floor(Math.random()*3)];
+    var sideLength = randomRange(minLength,maxLength);
+    var x = randomRange(200,700);
+    var y = randomRange((-0.2) * x + 550, yMax);
+    context.fillRect(x,y,sideLength,-sideLength);
+    context.strokeRect(x,y,sideLength,-sideLength);
+  }
+
+  for (var i = 0; i <= numSquares; i++){
+    context.fillStyle = colors[Math.floor(Math.random()*3)];
+    var sideLength = randomRange(minLength,maxLength);
+    var x = randomRange(xMin,xMax);
+    var y = randomRange((0.5) * x + 400, yMax);
+    context.fillRect(x,y,sideLength,-sideLength);
+    context.strokeRect(x,y,sideLength,-sideLength);
+  }
+  for (var i = 0; i <= numSquares / 3; i++){
+    context.fillStyle = colors2[Math.floor(Math.random()*3)];
+    var sideLength = randomRange(minLength,maxLength);
+    var x = randomRange(300,700);
+    var y = randomRange((-0.5) * x + 850, yMax);
+    context.fillRect(x,y,sideLength,-sideLength);
+    context.strokeRect(x,y,sideLength,-sideLength);
+  }
+  for (var i = 0; i <= numSquares / 2; i++){
+    context.fillStyle = 'rgba(80,79,77,1)';
+    var sideLength = randomRange(minLength,maxLength);
+    var x = randomRange(0,700);
+    var y = randomRange(695,700);
+    context.fillRect(x,y,sideLength,-sideLength);
+    context.strokeRect(x,y,sideLength,-sideLength);
+  }
+  for (var i = 0; i <= 7; i++){
+    context.fillStyle = 'rgba(72,128,29,1)';
+    var x = randomRange(0,700);
+    var y = randomRange((0.5) * x + 400, 650);
+    var sideLength = 10;
+    for (var j = 0; j <= 7; j++){
+      context.fillRect(x,y,sideLength,sideLength);
+      context.strokeStyle = 'rgba(0,0,0,0.2)';
+      context.strokeRect(x,y,sideLength,sideLength);
+      if (j % 2 === 0){
+        x += sideLength;
+        y -= sideLength;
+      } else {
+        x -= sideLength;
+        y -= sideLength;
+      }
+    }
+  }
 
   var x = 100;
   var y = 100;
