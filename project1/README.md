@@ -8,7 +8,7 @@ Pauli is a deep sea diver in charge of recovering lost treasure from a shipwreck
 
 ## How to run the game
 
-
+The game runs in the browser! Just navigate to [here](http://dmtopp.github.io/project1/index.html) to get started.
 
 ## Technologies Used
 
@@ -45,6 +45,10 @@ Because the movement mechanics reverse Pauli's direction near the edge of the sc
 #### Screen Sizing
 
 The game does not resize well and at this point only runs in a static box of 700x700 pixels. This may cause issues with the page when running the game on different screen sizes.
+
+#### Other browsers?
+
+I have only tested this game in chrome.  I have no idea if it will run on other browsers. 
 
 ## The future of Blocktopus
 
