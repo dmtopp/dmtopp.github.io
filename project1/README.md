@@ -52,4 +52,7 @@ Although I met most of my goals for what I wanted to accomplish during the timel
 
 + It's quiet... too quiet.  The game needs sounds and music!
 + A new challenger has appeared!  I started to work on 2-player mode but ultimately wasn't able to get it finished before the project deadline.  It's always more fun to play with your friends!
-+ Randomized backgrounds!  The background of the game is a pattern of random squares created using the code in background.js.  In the future I would like to find a way to randomize the background at the beginning of every level. 
++ Randomized backgrounds!  The background of the game is a pattern of random squares created using the code in background.js.  In the future I would like to find a way to randomize the background at the beginning of every level.
+
+
+**Thanks for reading!  I hope you enjoyed the game.**
