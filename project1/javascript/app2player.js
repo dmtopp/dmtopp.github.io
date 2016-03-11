@@ -155,6 +155,54 @@ var pauli = {
 }
 // end pauli object
 
+// begin pauli object
+var pauli2 = {
+  width: 17,
+  height: 42,
+  xPos: 650,
+  yPos: 662,
+  dx: 0.5,
+  dy: -0.5,
+  speed: 12,
+  faceLeft: true,
+  drawPauli: function(){
+    var image = new Image();
+    if(this.faceLeft){
+      image.src = 'img/pauli-sprite-left.png';
+    }else {
+      image.src = 'img/pauli-sprite.png';
+    }
+    app.context.drawImage(image, this.xPos, this.yPos);
+  },
+  updatePosition: function(){
+    if (app.northDown && this.dy <= 5) this.dy -= (this.speed * app.dt);
+    if (app.southDown && this.dy <= 5) this.dy += (this.speed * app.dt);
+    if (app.eastDown  && this.dx <= 5) this.dx += (this.speed * app.dt);
+    if (app.westDown  && this.dx <= 5) this.dx -= (this.speed * app.dt);
+    // Bounce pauli off the edges of the screen
+    if (this.xPos + this.width + this.dx > app.width){
+      this.dx *= -0.2;
+      // this.xPos = app.width;
+    } else if (this.xPos + this.dx < 0) {
+      this.dx *= -0.2;
+      // this.xPos = 0;
+    } else if (this.yPos + this.width + this.dy > app.width) {
+      this.dy *= -0.2;
+      // this.yPos = app.width;
+    } else if (this.yPos + this.dy < 0) {
+      this.dy *= -0.2;
+      // this.yPos = 0;
+    }
+    // update Pauli's position
+    this.xPos += this.dx;
+    this.yPos += this.dy;
+    this.dx = this.dx / 1.025;
+    this.dy = this.dy / 1.025;
+
+  }
+}
+// end pauli object
+
 function Coin(){
   this.dy = 2;
   this.yPos = -20;
