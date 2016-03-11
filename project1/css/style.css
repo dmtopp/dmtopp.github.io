@@ -39,7 +39,7 @@ body {
   display: inline-block;
   border: 3px solid black;
   margin: auto;
-  background-image: url('http://localhost:7888/dmtopp.github.io/project1/img/squares-background2.png');
+  background-image: url('https://raw.githubusercontent.com/dmtopp/dmtopp.github.io/master/project1/img/squares-background2.png');
   background-position: center;
   background-size: cover;
 }
